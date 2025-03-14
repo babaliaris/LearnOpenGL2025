@@ -5,6 +5,7 @@
 namespace FRGL
 {
     class Window;
+    class Layer;
 
     class Application
     {
@@ -14,8 +15,13 @@ namespace FRGL
 
         void Run();
 
+        void AttachLayer(Layer *layer);
+        void DetachLayer(unsigned int id);
+
         private:
+        unsigned int m_layer_incremental;
         Window *m_window;
+        std::vector<Layer *> m_layers;
     };
 
     Application *CreateApplication();
