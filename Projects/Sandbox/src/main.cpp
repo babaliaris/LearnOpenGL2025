@@ -1,7 +1,22 @@
 #include <iostream>
+#define FRGL_ENTRY_POINT
+#include <FRGL/framework.h>
 
-int main(int argc, char **argv)
+class LearnOpenGL : public FRGL::Application
 {
-    std::cout << "Hello World!" << std::endl;
-    return 0;
+    public:
+    LearnOpenGL()
+    {
+
+    }
+
+    ~LearnOpenGL()
+    {
+
+    }
+};
+
+FRGL::Application *FRGL::CreateApplication()
+{
+    return new LearnOpenGL();
 }

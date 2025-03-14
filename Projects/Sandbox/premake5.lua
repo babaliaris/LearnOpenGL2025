@@ -16,13 +16,15 @@ project "Sandbox"
     includedirs
     {
         "%{_WORKING_DIR}/Extern/GLEW/include",
-        "%{_WORKING_DIR}/Extern/GLFW/include"
+        "%{_WORKING_DIR}/Extern/GLFW/include",
+        "%{_WORKING_DIR}/Projects/Framework/include"
     }
 
     links
     {
         "GLEW",
-        "GLFW"
+        "GLFW",
+        "Framework"
     }
 
     filter "system:linux"

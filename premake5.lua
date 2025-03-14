@@ -8,4 +8,5 @@ workspace "LearnOpenGL"
         include "Extern/GLFW"
     group ""
 
+    include "Projects/Framework"
     include "Projects/Sandbox"
