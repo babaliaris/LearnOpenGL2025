@@ -22,9 +22,10 @@ project "Sandbox"
 
     links
     {
+        "Framework",
         "GLEW",
-        "GLFW",
-        "Framework"
+        "GLFW"
+        
     }
 
     filter "system:linux"

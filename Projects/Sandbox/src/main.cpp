@@ -5,7 +5,8 @@
 class LearnOpenGL : public FRGL::Application
 {
     public:
-    LearnOpenGL()
+    LearnOpenGL():
+    Application(512, 512, "Learn OpenGL")
     {
 
     }
