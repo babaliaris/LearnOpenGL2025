@@ -47,7 +47,7 @@ namespace FRGL
         }
     }
 
-    void Application::AttachLayer(Layer *layer)
+    Layer *Application::AttachLayer(Layer *layer)
     {
         m_layer_incremental++;
 
@@ -56,6 +56,8 @@ namespace FRGL
         m_layers.push_back(layer);
 
         layer->OnAttach();
+
+        return layer;
     }
 
     void Application::DetachLayer(unsigned int id)

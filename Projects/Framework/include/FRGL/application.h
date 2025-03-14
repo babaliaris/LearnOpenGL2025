@@ -15,7 +15,7 @@ namespace FRGL
 
         void Run();
 
-        void AttachLayer(Layer *layer);
+        Layer *AttachLayer(Layer *layer);
         void DetachLayer(unsigned int id);
 
         private:
