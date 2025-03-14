@@ -1,0 +1,3 @@
+[submodule "Extern/GLFW"]
+	path = Extern/GLFW
+	url = https://github.com/babaliaris/glfw.git
