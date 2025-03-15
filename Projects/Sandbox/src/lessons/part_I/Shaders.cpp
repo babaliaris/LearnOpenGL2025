@@ -59,6 +59,8 @@ void Shaders::OnUpdate(double time)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    m_shader->SetUniform("uBrightness", glm::abs((float)sin(time)));
+
     m_shader->Bind();
     glCall(glBindVertexArray(m_vao));
     glCall(glDrawArrays(GL_TRIANGLES, 0, 3));
