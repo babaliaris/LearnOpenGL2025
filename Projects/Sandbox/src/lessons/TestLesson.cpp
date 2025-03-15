@@ -1,5 +1,6 @@
 #include "TestLesson.h"
 #include <iostream>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 TestLesson::TestLesson()
@@ -16,6 +17,8 @@ TestLesson::~TestLesson()
 void TestLesson::OnAttach()
 {
     std::cout << "TestLesson::OnAttach()" << std::endl;
+
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 }
 
 void TestLesson::OnDetach()
@@ -30,6 +33,8 @@ void TestLesson::OnStart()
 
 void TestLesson::OnUpdate()
 {
+    glClear(GL_COLOR_BUFFER_BIT);
+
     if (m_printOnUpdateOnce)
     {
         std::cout << "TestLesson::OnUpdate()" << std::endl;
