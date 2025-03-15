@@ -27,8 +27,6 @@ namespace FRGL
     {
         while (m_window->IsRunning())
         {
-            glClear(GL_COLOR_BUFFER_BIT);
-
             for (Layer *l : m_layers)
             {
                 if (!l->m_hasStarted)
