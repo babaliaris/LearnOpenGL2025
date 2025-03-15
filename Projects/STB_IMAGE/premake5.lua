@@ -1,4 +1,4 @@
-project "Framework"
+project "STB_IMAGE"
     kind "StaticLib"
     language "C++"
     targetdir "%{_WORKING_DIR}/builds/%{cfg.shortname}/"
@@ -6,19 +6,13 @@ project "Framework"
 
     files
     {
-        "src/**.h",
-        "src/**.cpp",
-        "src/**.hpp",
-        "src/**.c",
-        "include/**.h"
+        "src/stb_image.cpp",
+        "%{_WORKING_DIR}/Extern/stb_image.h"
     }
 
     includedirs
     {
-        "include",
-        "%{_WORKING_DIR}/Extern/GLEW/include",
-        "%{_WORKING_DIR}/Extern/GLFW/include",
-        "%{_WORKING_DIR}/Extern/GLM",
+        "src",
         "%{_WORKING_DIR}/Extern/STB"
     }
 

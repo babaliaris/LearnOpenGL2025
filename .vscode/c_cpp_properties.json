@@ -7,7 +7,8 @@
                 "${workspaceFolder}/Extern/GLEW/include",
                 "${workspaceFolder}/Extern/GLFW/include",
                 "${workspaceFolder}/Projects/Framework/include",
-                "${workspaceFolder}/Extern/GLM"
+                "${workspaceFolder}/Extern/GLM",
+                "${workspaceFolder}/Extern/STB"
 
             ],
             "defines": [],
