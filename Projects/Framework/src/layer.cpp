@@ -25,7 +25,7 @@ namespace FRGL
     {
     }
 
-    void Layer::OnUpdate()
+    void Layer::OnUpdate(double time)
     {
     }
 

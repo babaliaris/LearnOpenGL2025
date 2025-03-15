@@ -31,7 +31,7 @@ void TestLesson::OnStart()
     std::cout << "TestLesson::OnStart()" << std::endl;
 }
 
-void TestLesson::OnUpdate()
+void TestLesson::OnUpdate(double time)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 

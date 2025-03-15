@@ -66,6 +66,11 @@ namespace FRGL
         return !glfwWindowShouldClose(m_window);
     }
 
+    double Window::GetTime()
+    {
+        return glfwGetTime();
+    }
+
     void WindowSizeCB(GLFWwindow* window, int width, int height)
     {
         FRGL::Window *w = (FRGL::Window *)glfwGetWindowUserPointer(window);

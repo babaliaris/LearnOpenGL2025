@@ -55,7 +55,7 @@ void Shaders::OnStart()
     m_shader->SetUniform("uBrightness", 1.0f);
 }
 
-void Shaders::OnUpdate()
+void Shaders::OnUpdate(double time)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 

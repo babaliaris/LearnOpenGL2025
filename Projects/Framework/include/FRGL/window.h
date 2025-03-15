@@ -17,6 +17,7 @@ namespace FRGL
 
         void Update();
         bool IsRunning();
+        double GetTime();
 
         inline int GetWidth() const {return m_width;}
         inline int GetHeight() const {return m_height;}

@@ -37,7 +37,7 @@ namespace FRGL
 
                 else
                 {
-                    l->OnUpdate();
+                    l->OnUpdate(m_window->GetTime());
                 }
             }
 

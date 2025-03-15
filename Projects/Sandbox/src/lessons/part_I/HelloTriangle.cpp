@@ -130,7 +130,7 @@ void HelloTriangle::OnStart()
 {
 }
 
-void HelloTriangle::OnUpdate()
+void HelloTriangle::OnUpdate(double time)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 

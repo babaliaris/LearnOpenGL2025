@@ -10,7 +10,7 @@ class TestLesson: public FRGL::Layer
     virtual void OnAttach() override;
     virtual void OnDetach() override;
     virtual void OnStart() override;
-    virtual void OnUpdate() override;
+    virtual void OnUpdate(double time) override;
 
     private:
     bool m_printOnUpdateOnce;

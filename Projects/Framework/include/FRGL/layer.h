@@ -16,7 +16,7 @@ namespace FRGL
         virtual void OnAttach();
         virtual void OnDetach();
         virtual void OnStart();
-        virtual void OnUpdate();
+        virtual void OnUpdate(double time);
 
         std::string GetDebug() const;
 
