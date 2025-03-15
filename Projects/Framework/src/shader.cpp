@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <filesystem>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace FRGL
 {
@@ -19,6 +21,14 @@ namespace FRGL
         std::string fragment_source = ReadSourceFromFile(fFilename);
 
         m_id = CreateLinkProgram(vertex_source.c_str(), fragment_source.c_str());
+
+        std::filesystem::path vPath(vFilename);
+        std::filesystem::path fPath(fFilename);
+
+        std::stringstream ss;
+        ss << vPath.filename() << "_" << fPath.filename();
+
+        m_programName = ss.str();
     }
 
     Shader::~Shader()
@@ -34,6 +44,131 @@ namespace FRGL
     void Shader::UnBind()
     {
         glCall(glUseProgram(0));
+    }
+
+    void Shader::SetUniform(const char *name, int value)
+    {
+        this->Bind();
+
+        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+
+        if (loc < 0)
+        {
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            return;
+        }
+
+        glCall(glUniform1i(loc, value));
+
+        this->UnBind();
+    }
+
+
+    void Shader::SetUniform(const char *name, float value)
+    {
+        this->Bind();
+
+        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+
+        if (loc < 0)
+        {
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            return;
+        }
+
+        glCall(glUniform1f(loc, value));
+
+        this->UnBind();
+    }
+
+
+    void Shader::SetUniform(const char *name, const glm::vec2 &vec2)
+    {
+        this->Bind();
+
+        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+
+        if (loc < 0)
+        {
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            return;
+        }
+
+        glCall(glUniform2fv(loc, 1, glm::value_ptr(vec2)));
+
+        this->UnBind();
+    }
+
+
+    void Shader::SetUniform(const char *name, const glm::vec3 &vec3)
+    {
+        this->Bind();
+
+        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+
+        if (loc < 0)
+        {
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            return;
+        }
+
+        glCall(glUniform3fv(loc, 1, glm::value_ptr(vec3)));
+
+        this->UnBind();
+    }
+
+
+    void Shader::SetUniform(const char *name, const glm::vec4 &vec4)
+    {
+        this->Bind();
+
+        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+
+        if (loc < 0)
+        {
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            return;
+        }
+
+        glCall(glUniform4fv(loc, 1, glm::value_ptr(vec4)));
+
+        this->UnBind();
+    }
+
+
+    void Shader::SetUniform(const char *name, const glm::mat3 &mat3)
+    {
+        this->Bind();
+
+        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+
+        if (loc < 0)
+        {
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            return;
+        }
+
+        glCall(glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(mat3)));
+
+        this->UnBind();
+    }
+
+
+    void Shader::SetUniform(const char *name, const glm::mat4 &mat4)
+    {
+        this->Bind();
+
+        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+
+        if (loc < 0)
+        {
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            return;
+        }
+
+        glCall(glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat4)));
+
+        this->UnBind();
     }
 
 

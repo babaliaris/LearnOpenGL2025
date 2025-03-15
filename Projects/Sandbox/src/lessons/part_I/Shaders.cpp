@@ -17,14 +17,14 @@ void Shaders::OnAttach()
     glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
     };
 
     m_shader = new FRGL::Shader(
-        "Projects/Sandbox/src/shaders/part_I/HelloTriangle.v.glsl",
-        "Projects/Sandbox/src/shaders/part_I/HelloTriangle.f.glsl"
+        "Projects/Sandbox/src/shaders/part_I/Shaders.v.glsl",
+        "Projects/Sandbox/src/shaders/part_I/Shaders.f.glsl"
     );
 
     glCall(glGenVertexArrays(1, &m_vao));
@@ -34,8 +34,11 @@ void Shaders::OnAttach()
     glCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
     glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
 
-    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const void *)0));
+    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (const void *)0));
     glCall(glEnableVertexAttribArray(0));
+
+    glCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (const void *)(sizeof(float)*3)));
+    glCall(glEnableVertexAttribArray(1));
 
     glCall(glBindVertexArray(0));
     glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
@@ -49,6 +52,7 @@ void Shaders::OnDetach()
 
 void Shaders::OnStart()
 {
+    m_shader->SetUniform("uBrightness", 1.0f);
 }
 
 void Shaders::OnUpdate()
