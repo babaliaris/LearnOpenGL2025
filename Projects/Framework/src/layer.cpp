@@ -1,9 +1,11 @@
 #include <FRGL/layer.h>
+#include <sstream>
 
 namespace FRGL
 {
     Layer::Layer(const std::string &title):
-    m_id(0), m_hasStarted(false), m_title(title)
+    m_id(0), m_hasStarted(false), m_title(title),
+    m_application(nullptr)
     {
     }
 
@@ -25,5 +27,14 @@ namespace FRGL
 
     void Layer::OnUpdate()
     {
+    }
+
+    std::string Layer::GetDebug() const
+    {
+        std::stringstream ss;
+
+        ss << "" << m_title << "(" << m_id << ")";
+
+        return ss.str();
     }
 }

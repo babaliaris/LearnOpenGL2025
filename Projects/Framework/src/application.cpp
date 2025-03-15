@@ -53,6 +53,8 @@ namespace FRGL
 
         layer->m_id = m_layer_incremental;
 
+        layer->m_application = this;
+
         m_layers.push_back(layer);
 
         layer->OnAttach();

@@ -1,5 +1,6 @@
 #include "TestLesson.h"
 #include <iostream>
+#include <GLFW/glfw3.h>
 
 TestLesson::TestLesson()
 :Layer("TestLesson"), m_printOnUpdateOnce(true)
@@ -34,5 +35,10 @@ void TestLesson::OnUpdate()
         std::cout << "TestLesson::OnUpdate()" << std::endl;
         std::cout << "[TestLesson::OnUpdate()] " << GetTitle() << "(" << GetID() << ")" << std::endl;
         m_printOnUpdateOnce = false;
+    }
+
+    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        std::cout << "[" << GetDebug() << "] GLFW_KEY_SPACE" << std::endl;
     }
 }

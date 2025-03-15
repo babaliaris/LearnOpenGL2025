@@ -18,6 +18,8 @@ namespace FRGL
         Layer *AttachLayer(Layer *layer);
         void DetachLayer(unsigned int id);
 
+        inline Window *GetWindow() const {return m_window;}
+
         private:
         unsigned int m_layer_incremental;
         Window *m_window;
