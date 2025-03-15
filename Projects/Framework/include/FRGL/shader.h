@@ -15,5 +15,10 @@ namespace FRGL
 
         private:
         unsigned int m_id;
+        std::string m_vFilename, m_fFilename;
+
+        unsigned int CreateCompileShader(const char *source, unsigned int type);
+        unsigned int CreateLinkProgram(const char *vertexSource, const char *fragSource);
+        std::string ReadSourceFromFile(const char *filename);
     };
 }

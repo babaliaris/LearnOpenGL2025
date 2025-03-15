@@ -10,7 +10,7 @@ class LearnOpenGL : public FRGL::Application
     LearnOpenGL():
     Application(512, 512, "Learn OpenGL")
     {
-        this->AttachLayer(SelectLesson(LessonE::HELLO_TRIANGLE));
+        this->AttachLayer(SelectLesson(LessonE::SHADERS));
     }
 
     ~LearnOpenGL()
