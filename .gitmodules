@@ -7,3 +7,6 @@
 [submodule "Extern/GLEW"]
 	path = Extern/GLEW
 	url = https://github.com/babaliaris/GLEW.git
+[submodule "Extern/STB"]
+	path = Extern/STB
+	url = https://github.com/nothings/stb.git
