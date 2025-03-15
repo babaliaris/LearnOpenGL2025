@@ -4,3 +4,6 @@
 [submodule "Extern/GLM"]
 	path = Extern/GLM
 	url = https://github.com/g-truc/glm.git
+[submodule "Extern/GLEW"]
+	path = Extern/GLEW
+	url = https://github.com/babaliaris/GLEW.git
