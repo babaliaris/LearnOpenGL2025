@@ -17,6 +17,7 @@ project "Sandbox"
     {
         "%{_WORKING_DIR}/Extern/GLEW/include",
         "%{_WORKING_DIR}/Extern/GLFW/include",
+        "%{_WORKING_DIR}/Extern/GLM",
         "%{_WORKING_DIR}/Projects/Framework/include"
     }
 
