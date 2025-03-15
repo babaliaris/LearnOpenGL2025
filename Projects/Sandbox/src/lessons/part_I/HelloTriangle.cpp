@@ -7,20 +7,20 @@ GLuint CreateCompileShader(const char *source, GLenum type)
 {
     GLuint shader = glCreateShader(type);
 
-    glShaderSource(shader, 1, &source, NULL);
+    glCall(glShaderSource(shader, 1, &source, NULL));
 
-    glCompileShader(shader);
+    glCall(glCompileShader(shader));
 
     GLint info_length, success;
 
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_length);
+    glCall(glGetShaderiv(shader, GL_COMPILE_STATUS, &success));
+    glCall(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_length));
 
     if (!success)
     {
         char *info = new char[info_length];
 
-        glGetShaderInfoLog(shader, info_length, NULL, info);
+        glCall(glGetShaderInfoLog(shader, info_length, NULL, info));
 
         std::cout << "[Shader Compilation Error]\n" << info << std::endl;
 
@@ -40,26 +40,26 @@ GLuint CreateLinkProgram(const char *shaderSource, const char *fragSource)
 
     if (!vertexShader || !fragShader) return 0;
 
-    GLuint program = glCreateProgram();
+    glCall(GLuint program = glCreateProgram());
 
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragShader);
+    glCall(glAttachShader(program, vertexShader));
+    glCall(glAttachShader(program, fragShader));
 
-    glLinkProgram(program);
+    glCall(glLinkProgram(program));
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragShader);
+    glCall(glDeleteShader(vertexShader));
+    glCall(glDeleteShader(fragShader));
 
     GLint info_length, success;
 
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &info_length);
+    glCall(glGetProgramiv(program, GL_LINK_STATUS, &success));
+    glCall(glGetProgramiv(program, GL_INFO_LOG_LENGTH, &info_length));
 
     if (!success)
     {
         char *info = new char[info_length];
 
-        glGetProgramInfoLog(program, info_length, NULL, info);
+        glCall(glGetProgramInfoLog(program, info_length, NULL, info));
 
         std::cout << "[Program Linkage Error]\n" << info << std::endl;
 
@@ -82,7 +82,7 @@ HelloTriangle::~HelloTriangle()
 
 void HelloTriangle::OnAttach()
 {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 
     float vertices[] = {
         -0.5f, -0.5f, 0.0f,
@@ -106,24 +106,24 @@ void HelloTriangle::OnAttach()
 
     m_program = CreateLinkProgram(vertexSrc.c_str(), fragSrc.c_str());
 
-    glGenVertexArrays(1, &m_vao);
-    glBindVertexArray(m_vao);
+    glCall(glGenVertexArrays(1, &m_vao));
+    glCall(glBindVertexArray(m_vao));
 
-    glGenBuffers(1, &m_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glCall(glGenBuffers(1, &m_vbo));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
+    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const void *)0);
-    glEnableVertexAttribArray(0);
+    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const void *)0));
+    glCall(glEnableVertexAttribArray(0));
 
-    glBindVertexArray(0);
-    glBindBuffer(GL_VERTEX_ARRAY, 0);
+    glCall(glBindVertexArray(0));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
 }
 
 void HelloTriangle::OnDetach()
 {
-    glDeleteProgram(m_program);
+    glCall(glDeleteProgram(m_program));
 }
 
 void HelloTriangle::OnStart()
@@ -134,9 +134,9 @@ void HelloTriangle::OnUpdate()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(m_program);
-    glBindVertexArray(m_vao);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glUseProgram(0);
-    glBindVertexArray(0);
+    glCall(glUseProgram(m_program));
+    glCall(glBindVertexArray(m_vao));
+    glCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+    glCall(glUseProgram(0));
+    glCall(glBindVertexArray(0));
 }
