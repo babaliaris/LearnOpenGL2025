@@ -13,4 +13,5 @@ class HelloTriangle: public FRGL::Layer
     virtual void OnUpdate() override;
 
     private:
+    unsigned int m_vao, m_vbo, m_program;
 };
