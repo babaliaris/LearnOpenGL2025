@@ -9,6 +9,7 @@ namespace FRGL
     class Window
     {
         friend class Application;
+        friend void WindowSizeCB(GLFWwindow* window, int width, int height);
 
         public:
         Window(int width, int height, const std::string &title);

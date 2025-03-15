@@ -5,6 +5,9 @@
 
 namespace FRGL
 {
+    void WindowSizeCB(GLFWwindow* window, int width, int height);
+
+
     Window::Window(int width, int height, const std::string &title):
     m_width(width), m_height(height), m_numOfMonitors(0), m_title(title),
     m_window(NULL)
@@ -39,6 +42,12 @@ namespace FRGL
             glfwTerminate();
             return;
         }
+
+        glViewport(0, 0, width, height);
+
+        glfwSetWindowUserPointer(m_window, this);
+
+        glfwSetWindowSizeCallback(m_window, WindowSizeCB);
     }
 
     Window::~Window()
@@ -55,5 +64,17 @@ namespace FRGL
     bool Window::IsRunning()
     {
         return !glfwWindowShouldClose(m_window);
+    }
+
+    void WindowSizeCB(GLFWwindow* window, int width, int height)
+    {
+        FRGL::Window *w = (FRGL::Window *)glfwGetWindowUserPointer(window);
+
+        w->m_width = width;
+        w->m_height = height;
+
+        glViewport(0, 0, width, height);
+
+        std::cout << "[Window::WindowSizeCB] Window Resized (" << width << " , " << height << ")" << std::endl;
     }
 }
