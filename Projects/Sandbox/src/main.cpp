@@ -2,8 +2,7 @@
 
 #define FRGL_ENTRY_POINT
 #include <FRGL/framework.h>
-
-#include "lessons/TestLesson.h"
+#include "lessons/lessons.h"
 
 class LearnOpenGL : public FRGL::Application
 {
@@ -11,7 +10,7 @@ class LearnOpenGL : public FRGL::Application
     LearnOpenGL():
     Application(512, 512, "Learn OpenGL")
     {
-        this->AttachLayer(new TestLesson());
+        this->AttachLayer(SelectLesson(LessonE::HELLO_TRIANGLE));
     }
 
     ~LearnOpenGL()

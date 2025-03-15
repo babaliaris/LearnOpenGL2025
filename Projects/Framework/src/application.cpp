@@ -55,6 +55,8 @@ namespace FRGL
 
         m_layers.push_back(layer);
 
+        std::cout << "Starting Lesson: " << layer->GetDebug() << std::endl;
+
         layer->OnAttach();
 
         return layer;
