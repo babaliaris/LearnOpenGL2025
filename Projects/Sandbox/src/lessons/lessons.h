@@ -6,12 +6,13 @@
 #include "part_I/Shaders.h"
 #include "part_I/Textures.h"
 #include "part_I/Transformations.h"
+#include "part_I/CoordinateSpaces.h"
 
 enum class LessonE
 {
     PART_I_TEST_LESSON, PART_I_HELLO_TRIANGLE,
     PART_I_SHADERS, PART_I_TEXTURES,
-    PART_I_TRANSFORMATIONS
+    PART_I_TRANSFORMATIONS, PART_I_COORDINATE_SPACES
 };
 
 FRGL::Layer *SelectLesson(LessonE lesson)
@@ -26,9 +27,15 @@ FRGL::Layer *SelectLesson(LessonE lesson)
 
         case LessonE::PART_I_SHADERS:
             return new Shaders();
+
+        case LessonE::PART_I_TEXTURES:
+            return new Textures();
         
         case LessonE::PART_I_TRANSFORMATIONS:
             return new Transformations();
+
+        case LessonE::PART_I_COORDINATE_SPACES:
+            return new CoordinateSpaces();
 
         default:
             return nullptr;
