@@ -111,6 +111,7 @@ void CameraLesson::OnDetach()
 void CameraLesson::OnStart()
 {
     glCall(glEnable(GL_DEPTH_TEST));
+    glfwSetInputMode(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     m_cam = new FRGL::Camera(GetApp(), glm::vec3(0.0f, 0.0f, 3.0f));
     m_cam->SetSpeed(5.0f);
@@ -123,7 +124,7 @@ void CameraLesson::OnUpdate(double time)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_cam->Move(FRGL::CameraModeE::KEYBOARD);
+    m_cam->Move(FRGL::CameraModeE::KEYBOARD_MOUSE);
 
     m_shader->SetUniform("uProj", glm::perspective(
         glm::radians(45.0f),

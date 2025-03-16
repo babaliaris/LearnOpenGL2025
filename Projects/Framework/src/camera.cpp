@@ -28,11 +28,15 @@ namespace FRGL
 
     void Camera::Move(CameraModeE mode)
     {
+        
+
         if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
             m_actualSpeed = m_sprint;
 
         else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
             m_actualSpeed = m_speed;
+
+        
 
         if (mode == CameraModeE::KEYBOARD)
         {
@@ -40,6 +44,62 @@ namespace FRGL
                 m_pos = m_pos - m_right * m_actualSpeed * m_app->GetDeltaTime();
 
             else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+                m_pos = m_pos + m_right * m_actualSpeed * m_app->GetDeltaTime();
+
+            if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_UP) == GLFW_PRESS)
+                m_pos = m_pos + m_up * m_actualSpeed * m_app->GetDeltaTime();
+
+            else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+                m_pos = m_pos - m_up * m_actualSpeed * m_app->GetDeltaTime();
+
+            if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+                m_pos = m_pos + m_direction * m_actualSpeed * m_app->GetDeltaTime();
+
+            else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+                m_pos = m_pos - m_direction * m_actualSpeed * m_app->GetDeltaTime();
+        }
+
+        else
+        {
+            double mouseX, mouseY;
+            glfwGetCursorPos(m_app->GetWindow()->GetGLFWwindow(), &mouseX, &mouseY);
+
+            if (m_firstMouse)
+            {
+                m_lastX = (float)mouseX;
+                m_lastY = (float)mouseY;
+                m_firstMouse = false;
+            }
+
+            float xOffset = mouseX - m_lastX;
+            float yOffset = m_lastY - mouseY;
+
+            m_lastX = mouseX;
+            m_lastY = mouseY;
+
+            m_pitch += yOffset * m_sensitivity * m_app->GetDeltaTime();
+            m_yaw   += xOffset * m_sensitivity * m_app->GetDeltaTime();
+
+            if (m_pitch > 89.0f)
+                m_pitch = 89.0f;
+
+            if (m_pitch < -89.0f)
+                m_pitch = -89.0f;
+
+            float yaw_rad = glm::radians(m_yaw);
+            float pitch_rad = glm::radians(m_pitch);
+
+            m_direction = glm::normalize(glm::vec3(
+                cos(yaw_rad) * cos(pitch_rad),
+                sin(pitch_rad),
+                sin(yaw_rad) * cos(pitch_rad)
+            ));
+
+
+            if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
+                m_pos = m_pos - m_right * m_actualSpeed * m_app->GetDeltaTime();
+
+            else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
                 m_pos = m_pos + m_right * m_actualSpeed * m_app->GetDeltaTime();
 
             if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_UP) == GLFW_PRESS)
