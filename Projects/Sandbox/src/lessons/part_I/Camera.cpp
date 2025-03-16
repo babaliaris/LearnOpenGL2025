@@ -7,6 +7,8 @@
 CameraLesson::CameraLesson()
 :Layer("CameraLesson")
 {
+    m_cam.SetSpeed(5.0f);
+
     m_cubePositions[0] = glm::vec3( 0.0f,  0.0f,  0.0f);
     m_cubePositions[1] = glm::vec3( 2.0f,  5.0f, -15.0f);
     m_cubePositions[2] = glm::vec3(-1.5f, -2.2f, -2.5f);
@@ -154,20 +156,26 @@ void CameraLesson::OnUpdate(double time)
 void CameraLesson::MoveCamera()
 {
     if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::LEFT);
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::LEFT, GetApp()->GetDeltaTime());
 
     else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::RIGHT);
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::RIGHT, GetApp()->GetDeltaTime());
 
     if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_UP) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::UP);
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::UP, GetApp()->GetDeltaTime());
 
     else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::DOWN);
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::DOWN, GetApp()->GetDeltaTime());
 
     if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::FORWARD);
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::FORWARD, GetApp()->GetDeltaTime());
 
     else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::BACKWARD);
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::BACKWARD, GetApp()->GetDeltaTime());
+
+    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        m_cam.SetSpeed(10.0f);
+
+    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+        m_cam.SetSpeed(5.0f);
 }

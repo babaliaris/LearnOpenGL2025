@@ -19,10 +19,12 @@ namespace FRGL
         void DetachLayer(unsigned int id);
 
         inline Window *GetWindow() const {return m_window;}
+        inline float GetDeltaTime() const {return m_deltatime;}
 
         private:
         unsigned int m_layer_incremental;
         Window *m_window;
+        float m_deltatime;
         std::vector<Layer *> m_layers;
     };
 

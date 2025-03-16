@@ -8,7 +8,7 @@
 namespace FRGL
 {
     Application::Application(int width, int height, const std::string &title):
-    m_layer_incremental(0), m_window(nullptr)
+    m_layer_incremental(0), m_window(nullptr), m_deltatime(0)
     {
         m_window = new Window(width, height, title);
     }
@@ -25,8 +25,15 @@ namespace FRGL
 
     void Application::Run()
     {
+        float currentFrameTime  = m_window->GetTime();
+        float previousFrameTime = m_window->GetTime();
+
         while (m_window->IsRunning())
         {
+            currentFrameTime    = m_window->GetTime();
+            m_deltatime         = currentFrameTime - previousFrameTime;
+            previousFrameTime   = currentFrameTime;
+
             for (Layer *l : m_layers)
             {
                 if (!l->m_hasStarted)

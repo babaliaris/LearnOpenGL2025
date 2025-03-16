@@ -23,27 +23,27 @@ namespace FRGL
     }
 
 
-    void Camera::Move(CameraModeE mode, CameraMoveE move)
+    void Camera::Move(CameraModeE mode, CameraMoveE move, float deltaTime)
     {
         if (mode == CameraModeE::KEYBOARD)
         {
             if (move == CameraMoveE::LEFT)
-                m_pos = m_pos - m_right * m_speed;
+                m_pos = m_pos - m_right * m_speed * deltaTime;
 
             else if (move == CameraMoveE::RIGHT)
-                m_pos = m_pos + m_right * m_speed;
+                m_pos = m_pos + m_right * m_speed * deltaTime;
 
             if (move == CameraMoveE::UP)
-                m_pos = m_pos + m_up * m_speed;
+                m_pos = m_pos + m_up * m_speed * deltaTime;
 
             else if (move == CameraMoveE::DOWN)
-                m_pos = m_pos - m_up * m_speed;
+                m_pos = m_pos - m_up * m_speed * deltaTime;
 
             if (move == CameraMoveE::FORWARD)
-                m_pos = m_pos + m_direction * m_speed;
+                m_pos = m_pos + m_direction * m_speed * deltaTime;
 
             else if (move == CameraMoveE::BACKWARD)
-                m_pos = m_pos - m_direction * m_speed;
+                m_pos = m_pos - m_direction * m_speed * deltaTime;
         }
 
         this->CalculateLocalSpace();
