@@ -4,5 +4,6 @@
 #include "window.h"
 #include "layer.h"
 #include "shader.h"
+#include "texture.h"
 
 #include "entryPoint.h"
