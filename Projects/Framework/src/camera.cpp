@@ -1,16 +1,19 @@
 #include <FRGL/camera.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
+#include <FRGL/application.h>
+#include <FRGL/window.h>
 
 namespace FRGL
 {
-    Camera::Camera(const glm::vec3 &pos):
-    m_pos(pos), m_direction(glm::vec3(0.0f, 0.0f, -1.0f))
+    Camera::Camera(Application *app, const glm::vec3 &pos):
+    m_pos(pos), m_direction(glm::vec3(0.0f, 0.0f, -1.0f)), m_app(app)
     {
         this->CalculateLocalSpace();
     }
 
-    Camera::Camera(float posx, float posy, float posz):
-    m_direction(glm::vec3(0.0f, 0.0f, -1.0f))
+    Camera::Camera(Application *app, float posx, float posy, float posz):
+    m_direction(glm::vec3(0.0f, 0.0f, -1.0f)), m_app(app)
     {
         m_pos = glm::vec3(posx, posy, posz);
         this->CalculateLocalSpace();
@@ -23,27 +26,33 @@ namespace FRGL
     }
 
 
-    void Camera::Move(CameraModeE mode, CameraMoveE move, float deltaTime)
+    void Camera::Move(CameraModeE mode)
     {
+        if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+            m_actualSpeed = m_sprint;
+
+        else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+            m_actualSpeed = m_speed;
+
         if (mode == CameraModeE::KEYBOARD)
         {
-            if (move == CameraMoveE::LEFT)
-                m_pos = m_pos - m_right * m_speed * deltaTime;
+            if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+                m_pos = m_pos - m_right * m_actualSpeed * m_app->GetDeltaTime();
 
-            else if (move == CameraMoveE::RIGHT)
-                m_pos = m_pos + m_right * m_speed * deltaTime;
+            else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+                m_pos = m_pos + m_right * m_actualSpeed * m_app->GetDeltaTime();
 
-            if (move == CameraMoveE::UP)
-                m_pos = m_pos + m_up * m_speed * deltaTime;
+            if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_UP) == GLFW_PRESS)
+                m_pos = m_pos + m_up * m_actualSpeed * m_app->GetDeltaTime();
 
-            else if (move == CameraMoveE::DOWN)
-                m_pos = m_pos - m_up * m_speed * deltaTime;
+            else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+                m_pos = m_pos - m_up * m_actualSpeed * m_app->GetDeltaTime();
 
-            if (move == CameraMoveE::FORWARD)
-                m_pos = m_pos + m_direction * m_speed * deltaTime;
+            if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+                m_pos = m_pos + m_direction * m_actualSpeed * m_app->GetDeltaTime();
 
-            else if (move == CameraMoveE::BACKWARD)
-                m_pos = m_pos - m_direction * m_speed * deltaTime;
+            else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+                m_pos = m_pos - m_direction * m_actualSpeed * m_app->GetDeltaTime();
         }
 
         this->CalculateLocalSpace();

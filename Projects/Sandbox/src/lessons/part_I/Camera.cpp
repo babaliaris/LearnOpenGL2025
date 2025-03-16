@@ -7,8 +7,6 @@
 CameraLesson::CameraLesson()
 :Layer("CameraLesson")
 {
-    m_cam.SetSpeed(5.0f);
-
     m_cubePositions[0] = glm::vec3( 0.0f,  0.0f,  0.0f);
     m_cubePositions[1] = glm::vec3( 2.0f,  5.0f, -15.0f);
     m_cubePositions[2] = glm::vec3(-1.5f, -2.2f, -2.5f);
@@ -107,11 +105,15 @@ void CameraLesson::OnDetach()
     delete m_shader;
     delete m_texture1;
     delete m_texture2;
+    delete m_cam;
 }
 
 void CameraLesson::OnStart()
 {
     glCall(glEnable(GL_DEPTH_TEST));
+
+    m_cam = new FRGL::Camera(GetApp(), glm::vec3(0.0f, 0.0f, 3.0f));
+    m_cam->SetSpeed(5.0f);
 
     m_shader->SetUniform("uContainer", 0);
     m_shader->SetUniform("uSmily", 1);
@@ -121,7 +123,7 @@ void CameraLesson::OnUpdate(double time)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    this->MoveCamera();
+    m_cam->Move(FRGL::CameraModeE::KEYBOARD);
 
     m_shader->SetUniform("uProj", glm::perspective(
         glm::radians(45.0f),
@@ -129,7 +131,7 @@ void CameraLesson::OnUpdate(double time)
         01.f, 100.0f)
     );
 
-    m_shader->SetUniform("uView", m_cam.GetProj());
+    m_shader->SetUniform("uView", m_cam->GetProj());
 
     for(unsigned int i = 0; i < 10; i++)
     {
@@ -149,33 +151,4 @@ void CameraLesson::OnUpdate(double time)
         glCall(glBindVertexArray(m_vao));
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
-}
-
-
-
-void CameraLesson::MoveCamera()
-{
-    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::LEFT, GetApp()->GetDeltaTime());
-
-    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::RIGHT, GetApp()->GetDeltaTime());
-
-    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_UP) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::UP, GetApp()->GetDeltaTime());
-
-    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::DOWN, GetApp()->GetDeltaTime());
-
-    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::FORWARD, GetApp()->GetDeltaTime());
-
-    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
-        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::BACKWARD, GetApp()->GetDeltaTime());
-
-    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        m_cam.SetSpeed(10.0f);
-
-    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
-        m_cam.SetSpeed(5.0f);
 }
