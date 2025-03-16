@@ -40,7 +40,7 @@ FRGL::Layer *SelectLesson(LessonE lesson)
             return new CoordinateSpaces();
 
         case LessonE::PART_I_CAMERA:
-            return new Camera();
+            return new CameraLesson();
 
         default:
             return nullptr;

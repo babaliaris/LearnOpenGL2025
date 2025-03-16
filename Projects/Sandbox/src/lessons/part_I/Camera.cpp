@@ -4,8 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera()
-:Layer("Camera")
+CameraLesson::CameraLesson()
+:Layer("CameraLesson")
 {
     m_cubePositions[0] = glm::vec3( 0.0f,  0.0f,  0.0f);
     m_cubePositions[1] = glm::vec3( 2.0f,  5.0f, -15.0f);
@@ -19,11 +19,11 @@ Camera::Camera()
     m_cubePositions[9] = glm::vec3(-1.3f,  1.0f, -1.5f);
 }
 
-Camera::~Camera()
+CameraLesson::~CameraLesson()
 {
 }
 
-void Camera::OnAttach()
+void CameraLesson::OnAttach()
 {
     glCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 
@@ -100,31 +100,34 @@ void Camera::OnAttach()
 
 }
 
-void Camera::OnDetach()
+void CameraLesson::OnDetach()
 {
     delete m_shader;
     delete m_texture1;
     delete m_texture2;
 }
 
-void Camera::OnStart()
+void CameraLesson::OnStart()
 {
     glCall(glEnable(GL_DEPTH_TEST));
 
     m_shader->SetUniform("uContainer", 0);
     m_shader->SetUniform("uSmily", 1);
-    m_shader->SetUniform("uView", glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f)));
 }
 
-void Camera::OnUpdate(double time)
+void CameraLesson::OnUpdate(double time)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    this->MoveCamera();
 
     m_shader->SetUniform("uProj", glm::perspective(
         glm::radians(45.0f),
         (float)GetApp()->GetWindow()->GetWidth() / GetApp()->GetWindow()->GetHeight(),
         01.f, 100.0f)
     );
+
+    m_shader->SetUniform("uView", m_cam.GetProj());
 
     for(unsigned int i = 0; i < 10; i++)
     {
@@ -144,4 +147,27 @@ void Camera::OnUpdate(double time)
         glCall(glBindVertexArray(m_vao));
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
+}
+
+
+
+void CameraLesson::MoveCamera()
+{
+    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::LEFT);
+
+    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::RIGHT);
+
+    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_UP) == GLFW_PRESS)
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::UP);
+
+    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::DOWN);
+
+    if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::FORWARD);
+
+    else if (glfwGetKey(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+        m_cam.Move(FRGL::CameraModeE::KEYBOARD, FRGL::CameraMoveE::BACKWARD);
 }

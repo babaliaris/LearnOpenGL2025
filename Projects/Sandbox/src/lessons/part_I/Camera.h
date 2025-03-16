@@ -1,11 +1,11 @@
 #pragma once
 #include <FRGL/framework.h>
 
-class Camera: public FRGL::Layer
+class CameraLesson: public FRGL::Layer
 {
     public:
-    Camera();
-    virtual ~Camera();
+    CameraLesson();
+    virtual ~CameraLesson();
 
     virtual void OnAttach() override;
     virtual void OnDetach() override;
@@ -17,4 +17,7 @@ class Camera: public FRGL::Layer
     FRGL::Shader *m_shader;
     FRGL::Texture *m_texture1, *m_texture2;
     glm::vec3 m_cubePositions[10];
+    FRGL::Camera m_cam = FRGL::Camera(0.0f, 0.0f, 3.0f);
+
+    void MoveCamera();
 };
