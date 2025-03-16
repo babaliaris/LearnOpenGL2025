@@ -7,12 +7,14 @@
 #include "part_I/Textures.h"
 #include "part_I/Transformations.h"
 #include "part_I/CoordinateSpaces.h"
+#include "part_I/Camera.h"
 
 enum class LessonE
 {
     PART_I_TEST_LESSON, PART_I_HELLO_TRIANGLE,
     PART_I_SHADERS, PART_I_TEXTURES,
-    PART_I_TRANSFORMATIONS, PART_I_COORDINATE_SPACES
+    PART_I_TRANSFORMATIONS, PART_I_COORDINATE_SPACES,
+    PART_I_CAMERA
 };
 
 FRGL::Layer *SelectLesson(LessonE lesson)
@@ -36,6 +38,9 @@ FRGL::Layer *SelectLesson(LessonE lesson)
 
         case LessonE::PART_I_COORDINATE_SPACES:
             return new CoordinateSpaces();
+
+        case LessonE::PART_I_CAMERA:
+            return new Camera();
 
         default:
             return nullptr;
