@@ -6,10 +6,38 @@ in vec2 texCoord;
 
 out vec4 fColor;
 
+struct AmbientLight
+{
+    vec3 color;
+    float strength;
+
+};
+
+
+struct LightSource
+{
+    vec3 color;
+    vec3 pos;
+    float strength;
+
+};
+
+
 uniform sampler2D uContainer;
-uniform vec3 uLightColor;
+uniform AmbientLight uAmbient;
+uniform LightSource uLight;
+
+
+vec4 calculateAmbient();
 
 void main()
 {
-    fColor = texture(uContainer, texCoord) * vec4(uLightColor, 1.0f);
+    vec4 texture = texture(uContainer, texCoord);
+
+    fColor = texture * calculateAmbient();
+}
+
+vec4 calculateAmbient()
+{
+    return vec4(uAmbient.color * uAmbient.strength, 1.0f);
 }

@@ -26,7 +26,7 @@ namespace FRGL
         std::filesystem::path fPath(fFilename);
 
         std::stringstream ss;
-        ss << vPath.filename() << "_" << fPath.filename();
+        ss << vPath.filename().c_str() << "_" << fPath.filename().c_str();
 
         m_programName = ss.str();
     }
@@ -50,11 +50,11 @@ namespace FRGL
     {
         this->Bind();
 
-        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+        glCall(GLint loc = glGetUniformLocation(m_id, name));
 
         if (loc < 0)
         {
-            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName.c_str(), name);
             return;
         }
 
@@ -68,11 +68,11 @@ namespace FRGL
     {
         this->Bind();
 
-        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+        glCall(GLint loc = glGetUniformLocation(m_id, name));
 
         if (loc < 0)
         {
-            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName.c_str(), name);
             return;
         }
 
@@ -86,11 +86,11 @@ namespace FRGL
     {
         this->Bind();
 
-        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+        glCall(GLint loc = glGetUniformLocation(m_id, name));
 
         if (loc < 0)
         {
-            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName.c_str(), name);
             return;
         }
 
@@ -104,11 +104,11 @@ namespace FRGL
     {
         this->Bind();
 
-        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+        glCall(GLint loc = glGetUniformLocation(m_id, name));
 
         if (loc < 0)
         {
-            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName.c_str(), name);
             return;
         }
 
@@ -122,11 +122,11 @@ namespace FRGL
     {
         this->Bind();
 
-        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+        glCall(GLint loc = glGetUniformLocation(m_id, name));
 
         if (loc < 0)
         {
-            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName.c_str(), name);
             return;
         }
 
@@ -140,11 +140,11 @@ namespace FRGL
     {
         this->Bind();
 
-        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+        glCall(GLint loc = glGetUniformLocation(m_id, name));
 
         if (loc < 0)
         {
-            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName.c_str(), name);
             return;
         }
 
@@ -158,11 +158,11 @@ namespace FRGL
     {
         this->Bind();
 
-        glCall(GLuint loc = glGetUniformLocation(m_id, name));
+        glCall(GLint loc = glGetUniformLocation(m_id, name));
 
         if (loc < 0)
         {
-            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName, name);
+            printf("[Shader: %s] Uniform Location: %s, was not found!\n", m_programName.c_str(), name);
             return;
         }
 

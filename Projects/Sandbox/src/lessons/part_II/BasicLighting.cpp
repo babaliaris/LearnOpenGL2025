@@ -54,9 +54,10 @@ void BasicLighting::OnStart()
 
     //Container fixed uniforms.
     m_shaderContainer->SetUniform("uContainer", 0);
-    m_shaderContainer->SetUniform("uLightColor", glm::vec3(1.0f, 1.0f, 1.0f));
     m_shaderContainer->SetUniform("uModel", glm::mat4(1.0f));
     m_shaderContainer->SetUniform("uNormal", glm::mat3(1.0f));
+    m_shaderContainer->SetUniform("uAmbient.color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uAmbient.strength", 0.2f);
 
     //Light model matrix/uniform.
     glm::mat4 lightModel = glm::mat4(1.0f);
