@@ -56,8 +56,15 @@ void BasicLighting::OnStart()
     m_shaderContainer->SetUniform("uContainer", 0);
     m_shaderContainer->SetUniform("uModel", glm::mat4(1.0f));
     m_shaderContainer->SetUniform("uNormal", glm::mat3(1.0f));
+
+    //Ambient Light
     m_shaderContainer->SetUniform("uAmbient.color", glm::vec3(1.0f, 1.0f, 1.0f));
     m_shaderContainer->SetUniform("uAmbient.strength", 0.2f);
+
+    //Light Source
+    m_shaderContainer->SetUniform("uLight.pos", m_lightPos);
+    m_shaderContainer->SetUniform("uLight.color", glm::vec3(1.0f, 0.0f, 0.0f));
+    m_shaderContainer->SetUniform("uLight.strength", 1.0f);
 
     //Light model matrix/uniform.
     glm::mat4 lightModel = glm::mat4(1.0f);
@@ -81,12 +88,13 @@ void BasicLighting::OnUpdate(double time)
     );
 
     //Set container's uniforms.
+    m_shaderContainer->SetUniform("uView", m_cam->GetProj());
     m_shaderContainer->SetUniform("uProj", proj);
-    m_shaderLight->SetUniform("uProj", proj);
+    m_shaderContainer->SetUniform("uCamPos", m_cam->GetPos());
     
     //Set light's uniforms.
-    m_shaderContainer->SetUniform("uView", m_cam->GetProj());
     m_shaderLight->SetUniform("uView", m_cam->GetProj());
+    m_shaderLight->SetUniform("uProj", proj);
 
     //Draw the container.
     m_textureContainer->Bind(0);
