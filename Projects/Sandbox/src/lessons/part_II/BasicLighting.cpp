@@ -7,7 +7,6 @@
 BasicLighting::BasicLighting()
 :Layer("BasicLighting")
 {
-    this->InitializeVertices();
 }
 
 BasicLighting::~BasicLighting()
@@ -24,42 +23,14 @@ void BasicLighting::OnAttach()
         "Projects/Sandbox/src/shaders/part_II/BasicLighting.f.glsl"
     );
 
-    m_textureContainer = new FRGL::Texture("Projects/Sandbox/assets/textures/container.jpg");
-
-    glCall(glGenVertexArrays(1, &m_containerVao));
-    glCall(glBindVertexArray(m_containerVao));
-
-    glCall(glGenBuffers(1, &m_containerVbo));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_containerVbo));
-    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(m_containerVertices), m_containerVertices, GL_STATIC_DRAW));
-
-    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (const void *)0));
-    glCall(glEnableVertexAttribArray(0));
-
-    glCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (const void *)(sizeof(float)*3)));
-    glCall(glEnableVertexAttribArray(1));
-
-    glCall(glBindVertexArray(0));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
     m_shaderLight = new FRGL::Shader(
         "Projects/Sandbox/src/shaders/light.v.glsl",
         "Projects/Sandbox/src/shaders/light.f.glsl"
     );
 
-    glCall(glGenVertexArrays(1, &m_lightVao));
-    glCall(glBindVertexArray(m_lightVao));
+    m_textureContainer = new FRGL::Texture("Projects/Sandbox/assets/textures/container.jpg");
 
-    glCall(glGenBuffers(1, &m_lightVbo));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_lightVbo));
-    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(m_lightVertices), m_lightVertices, GL_STATIC_DRAW));
-
-    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const void *)0));
-    glCall(glEnableVertexAttribArray(0));
-
-    glCall(glBindVertexArray(0));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
+    this->InitializeGeometry();
 }
 
 void BasicLighting::OnDetach()
@@ -134,52 +105,52 @@ void BasicLighting::OnUpdate(double time)
 
 
 
-void BasicLighting::InitializeVertices()
+void BasicLighting::InitializeGeometry()
 {
    //Create the container.
-   float containerVertices[] = {
-    //Positions           TexCoords.
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-    0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    float containerVertices[] = {
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-    0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-    0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
 
@@ -231,14 +202,40 @@ void BasicLighting::InitializeVertices()
     };
 
 
-    for (unsigned int i = 0; i < 5*36; i++)
-    {
-        m_containerVertices[i] = containerVertices[i];
-    }
+    glCall(glGenVertexArrays(1, &m_containerVao));
+    glCall(glBindVertexArray(m_containerVao));
 
+    glCall(glGenBuffers(1, &m_containerVbo));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_containerVbo));
+    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(containerVertices), containerVertices, GL_STATIC_DRAW));
 
-    for (unsigned int i = 0; i < 3*36; i++)
-    {
-        m_lightVertices[i] = lightVertices[i];
-    }
+    //Positions
+    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (const void *)0));
+    glCall(glEnableVertexAttribArray(0));
+
+    //Normals
+    glCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (const void *)(sizeof(float)*3)));
+    glCall(glEnableVertexAttribArray(1));
+
+    //Texture Coordinates (UVs).
+    glCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (const void *)(sizeof(float)*6)));
+    glCall(glEnableVertexAttribArray(2));
+
+    glCall(glBindVertexArray(0));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+
+    
+
+    glCall(glGenVertexArrays(1, &m_lightVao));
+    glCall(glBindVertexArray(m_lightVao));
+
+    glCall(glGenBuffers(1, &m_lightVbo));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_lightVbo));
+    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(lightVertices), lightVertices, GL_STATIC_DRAW));
+
+    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const void *)0));
+    glCall(glEnableVertexAttribArray(0));
+
+    glCall(glBindVertexArray(0));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }

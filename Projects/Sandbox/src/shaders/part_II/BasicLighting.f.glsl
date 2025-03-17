@@ -1,6 +1,9 @@
 #version 330 core
 
+in vec3 fragPos;
+in vec3 normal;
 in vec2 texCoord;
+
 out vec4 fColor;
 
 uniform sampler2D uContainer;
