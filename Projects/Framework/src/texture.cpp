@@ -31,7 +31,7 @@ namespace FRGL
     {
         glCall(glActiveTexture(GL_TEXTURE0 + m_boundUnit));
         glCall(glBindTexture(GL_TEXTURE_2D, 0));
-        glCall(glActiveTexture(0));
+        glCall(glActiveTexture(GL_TEXTURE0));
     }
 
 
