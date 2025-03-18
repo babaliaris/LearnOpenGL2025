@@ -23,8 +23,7 @@ struct Light
     int   type; 
     int   isFinal; // = 1 if it's the last light in the array.
 
-    //The following can be unnitialized. Read "type"
-    //to figure out if they are not! (It should be equal to -1).
+    //The following can be unnitialized.
     vec3  position;
     vec3  direction;
     vec3  color;
@@ -37,18 +36,22 @@ uniform Material uMat;
 uniform Light uLights[10];
 uniform vec3 uCamPos;
 
+
 vec4 calculateFinalColor();
+
 
 void main()
 {
     fColor = calculateFinalColor();
 }
 
+//Ambient Calculator.
 vec4 calculateAmbient(in vec4 diffuseMap, in Light light)
 {
     return vec4(vec3(diffuseMap) * light.color * light.strength, 1.0f);
 }
 
+//Diffuse Calculator.
 vec4 calculateDiffuse(in vec4 diffuseMap, in Light light, in vec3 lightDir, in vec3 normalDir)
 {
     float diffStrength = max(dot(-lightDir, normalDir), 0.0f);
@@ -56,7 +59,7 @@ vec4 calculateDiffuse(in vec4 diffuseMap, in Light light, in vec3 lightDir, in v
     return vec4(vec3(diffuseMap) * light.color * light.strength * diffStrength, 1.0f);
 }
 
-
+//Specular Calculator.
 vec4 calculateSpecular(in vec4 specularMap, in Light light, in vec3 lightDir, in vec3 normalDir, in vec3 eyeDir)
 {
     vec3 reflectDir = normalize(reflect(lightDir, normalDir));
@@ -66,6 +69,7 @@ vec4 calculateSpecular(in vec4 specularMap, in Light light, in vec3 lightDir, in
     return vec4( vec3(specularMap) * light.color * light.strength * specStrength, 1.0f);
 }
 
+//Attenuation Calculator.
 float calcAttenuation(in float d, in Light light)
 {
     return 1.0f/( light.kc + light.kl*d + light.kq*pow(d,2) );
