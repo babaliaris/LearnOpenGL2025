@@ -7,6 +7,16 @@
 LightCasters::LightCasters()
 :Layer("LightCasters")
 {
+    m_cubePositions[0] = glm::vec3( 0.0f,  0.0f,  0.0f);
+    m_cubePositions[1] = glm::vec3( 2.0f,  5.0f, -15.0f);
+    m_cubePositions[2] = glm::vec3(-1.5f, -2.2f, -2.5f);
+    m_cubePositions[3] = glm::vec3(-3.8f, -2.0f, -12.3f);
+    m_cubePositions[4] = glm::vec3( 2.4f, -0.4f, -3.5f);
+    m_cubePositions[5] = glm::vec3(-1.7f,  3.0f, -7.5f);
+    m_cubePositions[6] = glm::vec3( 1.3f, -2.0f, -2.5f);
+    m_cubePositions[7] = glm::vec3( 1.5f,  2.0f, -2.5f);
+    m_cubePositions[8] = glm::vec3( 1.5f,  0.2f, -1.5f);
+    m_cubePositions[9] = glm::vec3(-1.3f,  1.0f, -1.5f);
 }
 
 LightCasters::~LightCasters()
@@ -100,16 +110,31 @@ void LightCasters::OnUpdate(double time)
     m_shaderLight->SetUniform("uView", m_cam->GetProj());
     m_shaderLight->SetUniform("uProj", proj);
 
-    //Draw the container.
-    m_containerDiffuse->Bind(0);
-    m_containerSpecular->Bind(1);
-    m_shaderContainer->Bind();
-    glCall(glBindVertexArray(m_containerVao));
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    m_containerDiffuse->Unbind();
-    m_containerSpecular->Unbind();
-    m_shaderContainer->UnBind();
-    glCall(glBindVertexArray(0));
+    //Draw the container multiple times in different positions.
+    for(unsigned int i = 0; i < 10; i++)
+    {
+        glm::mat4 model = glm::mat4(1.0f);
+
+        model = glm::translate(model, m_cubePositions[i]);
+
+        float angle = 20.0f * i; 
+
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+        m_shaderContainer->SetUniform("uModel", model);
+        m_shaderContainer->SetUniform("uNormal", glm::transpose(glm::inverse(glm::mat3(model))) );
+
+        //Draw the container.
+        m_containerDiffuse->Bind(0);
+        m_containerSpecular->Bind(1);
+        m_shaderContainer->Bind();
+        glCall(glBindVertexArray(m_containerVao));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        m_containerDiffuse->Unbind();
+        m_containerSpecular->Unbind();
+        m_shaderContainer->UnBind();
+        glCall(glBindVertexArray(0));
+    }
 
     //Draw the light.
     m_shaderLight->Bind();
