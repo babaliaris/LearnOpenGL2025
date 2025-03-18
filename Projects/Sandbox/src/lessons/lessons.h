@@ -11,6 +11,7 @@
 #include "part_II/Colors.h"
 #include "part_II/BasicLighting.h"
 #include "part_II/LightingMaps.h"
+#include "part_II/LightCasters.h"
 
 enum class LessonE
 {
@@ -18,7 +19,7 @@ enum class LessonE
     PART_I_SHADERS, PART_I_TEXTURES,
     PART_I_TRANSFORMATIONS, PART_I_COORDINATE_SPACES,
     PART_I_CAMERA, PART_II_COLORS, PART_II_BASIC_LIGHTING,
-    PART_II_LIGHTING_MAPS
+    PART_II_LIGHTING_MAPS, PART_II_LIGHT_CASTERS
 };
 
 FRGL::Layer *SelectLesson(LessonE lesson)
@@ -54,6 +55,9 @@ FRGL::Layer *SelectLesson(LessonE lesson)
 
         case LessonE::PART_II_LIGHTING_MAPS:
             return new LightingMaps();
+
+        case LessonE::PART_II_LIGHT_CASTERS:
+            return new LightCasters();
 
         default:
             return nullptr;
