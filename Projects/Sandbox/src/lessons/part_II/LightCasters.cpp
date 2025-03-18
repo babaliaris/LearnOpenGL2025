@@ -64,6 +64,9 @@ void LightCasters::OnStart()
     m_cam = new FRGL::Camera(GetApp(), glm::vec3(0.0f, 0.0f, 3.0f));
     m_cam->SetSpeed(5.0f);
 
+    //0=Directional Light, 1=Point Light, 2=Spot Light.
+    m_shaderContainer->SetUniform("uChooseLight", 1);;
+
     //Container fixed uniforms.
     m_shaderContainer->SetUniform("uMat.diffuse", 0);
     m_shaderContainer->SetUniform("uMat.specular", 1);
@@ -76,12 +79,12 @@ void LightCasters::OnStart()
     m_shaderContainer->SetUniform("uAmbient.strength", 0.2f);
 
     //Spot Light.
-    m_shaderContainer->SetUniform("uSpotLight.pos", m_lightPos);
-    m_shaderContainer->SetUniform("uSpotLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shaderContainer->SetUniform("uSpotLight.strength", 1.0f);
-    m_shaderContainer->SetUniform("uSpotLight.kc", 1.0f);
-    m_shaderContainer->SetUniform("uSpotLight.kl", 0.35f);
-    m_shaderContainer->SetUniform("uSpotLight.kq", 0.0035f);
+    m_shaderContainer->SetUniform("uPointLight.pos", m_lightPos);
+    m_shaderContainer->SetUniform("uPointLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uPointLight.strength", 1.0f);
+    m_shaderContainer->SetUniform("uPointLight.kc", 1.0f);
+    m_shaderContainer->SetUniform("uPointLight.kl", 0.1f);
+    m_shaderContainer->SetUniform("uPointLight.kq", 0.03f);
 
     //Light model matrix/uniform.
     glm::mat4 lightModel = glm::mat4(1.0f);
