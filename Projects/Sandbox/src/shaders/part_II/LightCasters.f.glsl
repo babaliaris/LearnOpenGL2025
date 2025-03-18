@@ -6,41 +6,6 @@ in vec2 texCoord;
 
 out vec4 fColor;
 
-struct AmbientLight
-{
-    vec3 color;
-    float strength;
-
-};
-
-
-struct PointLight
-{
-    vec3 color;
-    vec3 pos;
-    float strength;
-
-    float kc;
-    float kl;
-    float kq;
-
-};
-
-
-struct SpotLight
-{
-    vec3 color;
-    vec3 pos;
-    vec3 direction;
-    float strength;
-    float inner;
-    float outer;
-
-    float kc;
-    float kl;
-    float kq;
-};
-
 struct Material
 {
     sampler2D diffuse;
@@ -49,85 +14,39 @@ struct Material
 };
 
 
-//0=Directional, 1=Point Light, 2=Spot Light.
-uniform int uChooseLight;
+struct Light
+{
+    //0 : Directional.
+    //1 : Point.
+    //2 : Spot.
+    //3 : Ambient.
+    int   type; 
+    int   isFinal; // = 1 if it's the last light in the array.
+
+    //The following can be unnitialized. Read "type"
+    //to figure out if they are not! (It should be equal to -1).
+    vec3  position;
+    vec3  direction;
+    vec3  color;
+    float strength;
+    float kc, kl, kq;
+    float spotInner, spotOuter;
+};
 
 uniform Material uMat;
-uniform AmbientLight uAmbient;
-uniform PointLight uPointLight;
-uniform SpotLight uSpotLight;
+uniform Light uLights[10];
 uniform vec3 uCamPos;
 
-
-vec4 calculateAmbient(in vec4 diffuseMap);
-vec4 calculateDiffuse(in vec4 diffuseMap, in vec3 lightColor, in float lightStrength, in vec3 lightDir, in vec3 normalDir);
-vec4 calculateSpecular(in vec4 specularMap, in vec3 lightColor, in float lightStrength, in vec3 lightDir, in vec3 normalDir, in vec3 eyeDir, int shininess);
-float calcAttenuation(in float d, in float kc, in float kl, in float kq);
+vec4 calculateFinalColor();
 
 void main()
 {
-    vec4 finalColor  = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-    vec4 diffuseMap  = texture(uMat.diffuse, texCoord);
-    vec4 specularMap = texture(uMat.specular, texCoord);
-    
-    vec3 normalDir   = normalize(normal);
-    vec3 eyeDir      = normalize(fragPos - uCamPos);
-
-    vec3 lightColor;
-    vec3 lightDir;
-    float lightStrength;
-    float lightDist;
-    float kc, kl, kq;
-    float spotItense = 1.0f;
-
-    //Point Light.
-    if (uChooseLight == 1)
-    {
-        lightColor      = uPointLight.color;
-        lightStrength   = uPointLight.strength;
-        lightDir        = normalize(fragPos - uPointLight.pos);
-        lightDist       = length(fragPos - uPointLight.pos);
-        kc              = uPointLight.kc;
-        kl              = uPointLight.kl;
-        kq              = uPointLight.kq;
-    }
-
-    //Spot Light.
-    else if (uChooseLight == 2)
-    {
-        lightColor     = uSpotLight.color;
-        lightStrength  = uSpotLight.strength;
-        lightDir       = normalize(fragPos - uSpotLight.pos);
-        lightDist      = length(fragPos - uSpotLight.pos);
-        kc              = uSpotLight.kc;
-        kl              = uSpotLight.kl;
-        kq              = uSpotLight.kq;
-
-        float theta   = max( dot(-lightDir, -uSpotLight.direction), 0.0f );
-        spotItense    = clamp( (theta - uSpotLight.outer) / (uSpotLight.inner - uSpotLight.outer), 0.0f, 1.0f);
-    }
-
-    //Calculate Phong Lighting.
-    finalColor      += calculateDiffuse(diffuseMap, lightColor, lightStrength, lightDir, normalDir);
-    finalColor      += calculateSpecular(specularMap, lightColor, lightStrength, lightDir, normalDir, eyeDir, uMat.shininess);
-    finalColor      *= calcAttenuation(lightDist, kc, kl, kq);
-    finalColor      *= spotItense;
-
-    finalColor      += calculateAmbient(diffuseMap); //Add ambient at the end, to make sure there is some light.
-
-    //Debug color using normals.
-    if (uChooseLight > 2 || uChooseLight < 0)
-    {
-        finalColor = vec4(normal, 1.0f);
-    }
-
-    fColor = clamp(finalColor, 0.0f, 1.0f);
+    fColor = calculateFinalColor();
 }
 
-vec4 calculateAmbient(in vec4 diffuseMap)
+vec4 calculateAmbient(in vec4 diffuseMap, in vec3 lightColor, float lightSrength)
 {
-    return vec4(vec3(diffuseMap) * uAmbient.color * uAmbient.strength, 1.0f);
+    return vec4(vec3(diffuseMap) * lightColor * lightSrength, 1.0f);
 }
 
 vec4 calculateDiffuse(in vec4 diffuseMap, in vec3 lightColor, in float lightStrength, in vec3 lightDir, in vec3 normalDir)
@@ -150,4 +69,62 @@ vec4 calculateSpecular(in vec4 specularMap, in vec3 lightColor, in float lightSt
 float calcAttenuation(in float d, in float kc, in float kl, in float kq)
 {
     return 1.0f/( kc + kl*d + kq*pow(d,2) );
+}
+
+
+vec4 calculateFinalColor()
+{
+    vec4 ambientColor   = vec4(0.0f);
+    vec4 finalColor     = vec4(0.0f);
+    vec4 diffuseMap     = texture(uMat.diffuse, texCoord);
+    vec4 specularMap    = texture(uMat.specular, texCoord);
+    vec3 normalDir      = normalize(normal);
+    vec3 eyeDir         = normalize(fragPos - uCamPos);
+
+    //For each light.
+    for (int i = 0; i < 10; i++)
+    {
+        //Directional.
+        if (uLights[i].type == 0)
+        {   
+            //Not implemented yet, return the normals as a debug break color.
+            return vec4(normal, 1.0f);
+        }
+
+        //Point Or Spot Light.
+        else if (uLights[i].type < 3)
+        {
+            float spotItense  = 1.0f;
+            float lightDist   = length(fragPos - uLights[i].position);
+            float attenuation = calcAttenuation(lightDist, uLights[i].kc, uLights[i].kl, uLights[i].kq);
+            vec3  lightDir    = normalize(fragPos - uLights[i].position);
+
+            //If it is also a spot light, add circle mode intensity.
+            if (uLights[i].type == 2)
+            {
+                float theta = max( dot(-lightDir, -uLights[i].direction), 0.0f );
+                spotItense  = clamp( (theta - uLights[i].spotOuter) / (uLights[i].spotInner - uLights[i].spotOuter), 0.0f, 1.0f);
+            }
+
+            //Calculating diffuse, specular and adding attenuation, is the same for both point and spot lights.
+            vec4 diffuse  = calculateDiffuse(diffuseMap, uLights[i].color, uLights[i].strength, lightDir, normalDir);
+            vec4 specular = calculateSpecular(specularMap, uLights[i].color, uLights[i].strength, lightDir, normalDir, eyeDir, uMat.shininess);
+
+            finalColor  += (diffuse + specular) * attenuation * spotItense;
+        }
+
+        //Diffuse light.
+        else if (uLights[i].type == 3)
+        {   
+            //Keep ambient total light in a seperate variable, because if it is the last
+            //color added to the finalColor, then we make sure there is always some light!
+            ambientColor += calculateAmbient(diffuseMap, uLights[i].color, uLights[i].strength);
+        }
+
+        //Break out of the loop if uLights[i] is the last light.
+        if (uLights[i].isFinal == 1)
+            break;
+    }
+
+    return clamp(finalColor + ambientColor, 0.0f, 1.0f);
 }

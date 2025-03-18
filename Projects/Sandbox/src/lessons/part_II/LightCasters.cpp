@@ -75,25 +75,31 @@ void LightCasters::OnStart()
     m_shaderContainer->SetUniform("uNormal", glm::mat3(1.0f));
 
     //Ambient Light
-    m_shaderContainer->SetUniform("uAmbient.color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shaderContainer->SetUniform("uAmbient.strength", 0.2f);
+    m_shaderContainer->SetUniform("uLights[0].isFinal", 0);
+    m_shaderContainer->SetUniform("uLights[0].type", 3);
+    m_shaderContainer->SetUniform("uLights[0].color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uLights[0].strength", 0.2f);
 
     //Point Light.
-    m_shaderContainer->SetUniform("uPointLight.pos", m_lightPos);
-    m_shaderContainer->SetUniform("uPointLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shaderContainer->SetUniform("uPointLight.strength", 1.0f);
-    m_shaderContainer->SetUniform("uPointLight.kc", 1.0f);
-    m_shaderContainer->SetUniform("uPointLight.kl", 0.1f);
-    m_shaderContainer->SetUniform("uPointLight.kq", 0.03f);
+    m_shaderContainer->SetUniform("uLights[1].isFinal", 0);
+    m_shaderContainer->SetUniform("uLights[1].type", 1);
+    m_shaderContainer->SetUniform("uLights[1].position", m_lightPos);
+    m_shaderContainer->SetUniform("uLights[1].color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uLights[1].strength", 1.0f);
+    m_shaderContainer->SetUniform("uLights[1].kc", 1.0f);
+    m_shaderContainer->SetUniform("uLights[1].kl", 0.1f);
+    m_shaderContainer->SetUniform("uLights[1].kq", 0.03f);
 
     //Spot Light.
-    m_shaderContainer->SetUniform("uSpotLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shaderContainer->SetUniform("uSpotLight.strength", 1.0f);
-    m_shaderContainer->SetUniform("uSpotLight.inner", glm::cos(glm::radians(12.0f)));
-    m_shaderContainer->SetUniform("uSpotLight.outer",  glm::cos(glm::radians(17.0f)));
-    m_shaderContainer->SetUniform("uSpotLight.kc", 1.0f);
-    m_shaderContainer->SetUniform("uSpotLight.kl", 0.1f);
-    m_shaderContainer->SetUniform("uSpotLight.kq", 0.03f);
+    m_shaderContainer->SetUniform("uLights[2].isFinal", 1);
+    m_shaderContainer->SetUniform("uLights[2].type", 2);
+    m_shaderContainer->SetUniform("uLights[2].color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uLights[2].strength", 1.0f);
+    m_shaderContainer->SetUniform("uLights[2].spotInner", glm::cos(glm::radians(12.0f)));
+    m_shaderContainer->SetUniform("uLights[2].spotOuter",  glm::cos(glm::radians(17.0f)));
+    m_shaderContainer->SetUniform("uLights[2].kc", 1.0f);
+    m_shaderContainer->SetUniform("uLights[2].kl", 0.1f);
+    m_shaderContainer->SetUniform("uLights[2].kq", 0.03f);
 
     //Light model matrix/uniform.
     glm::mat4 lightModel = glm::mat4(1.0f);
@@ -120,8 +126,8 @@ void LightCasters::OnUpdate(double time)
     m_shaderContainer->SetUniform("uView", m_cam->GetProj());
     m_shaderContainer->SetUniform("uProj", proj);
     m_shaderContainer->SetUniform("uCamPos", m_cam->GetPos());
-    m_shaderContainer->SetUniform("uSpotLight.direction", m_cam->getDir());
-    m_shaderContainer->SetUniform("uSpotLight.pos", m_cam->GetPos());
+    m_shaderContainer->SetUniform("uLights[2].direction", m_cam->getDir());
+    m_shaderContainer->SetUniform("uLights[2].position", m_cam->GetPos());
     
     //Set light's uniforms.
     m_shaderLight->SetUniform("uView", m_cam->GetProj());
