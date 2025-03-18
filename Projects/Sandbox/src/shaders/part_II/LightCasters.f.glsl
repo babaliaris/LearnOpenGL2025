@@ -14,7 +14,7 @@ struct AmbientLight
 };
 
 
-struct LightSource
+struct SpotLight
 {
     vec3 color;
     vec3 pos;
@@ -32,7 +32,7 @@ struct Material
 
 uniform Material uMat;
 uniform AmbientLight uAmbient;
-uniform LightSource uLight;
+uniform SpotLight uSpotLight;
 uniform vec3 uCamPos;
 
 
@@ -42,7 +42,7 @@ vec4 calculateSpecular(in vec4 specularMap, in vec3 lightDir, in vec3 normalDir,
 
 void main()
 {
-    vec3 lightDir   = normalize(fragPos - uLight.pos);
+    vec3 lightDir   = normalize(fragPos - uSpotLight.pos);
     vec3 normalDir  = normalize(normal);
     vec3 eyeDir     = normalize(fragPos - uCamPos);
 
@@ -65,7 +65,7 @@ vec4 calculateDiffuse(in vec4 diffuseMap, in vec3 lightDir, in vec3 normalDir)
 {
     float diffStrength = max(dot(-lightDir, normalDir), 0.0f);
 
-    return vec4(vec3(diffuseMap) * uLight.color * uLight.strength * diffStrength, 1.0f);
+    return vec4(vec3(diffuseMap) * uSpotLight.color * uSpotLight.strength * diffStrength, 1.0f);
 }
 
 
@@ -75,5 +75,5 @@ vec4 calculateSpecular(in vec4 specularMap, in vec3 lightDir, in vec3 normalDir,
 
     float specStrength = pow(max(dot(reflectDir, -eyeDir), 0.0f), shininess);
 
-    return vec4( vec3(specularMap) * uLight.color * uLight.strength * specStrength, 1.0f);
+    return vec4( vec3(specularMap) * uSpotLight.color * uSpotLight.strength * specStrength, 1.0f);
 }
