@@ -84,45 +84,47 @@ vec4 calculateFinalColor()
     //For each light.
     for (int i = 0; i < 10; i++)
     {
+        Light light = uLights[i];
+
         //Directional.
-        if (uLights[i].type == 0)
+        if (light.type == 0)
         {   
             //Not implemented yet, return the normals as a debug break color.
             return vec4(normal, 1.0f);
         }
 
         //Point Or Spot Light.
-        else if (uLights[i].type < 3)
+        else if (light.type < 3)
         {
             float spotItense  = 1.0f;
-            float lightDist   = length(fragPos - uLights[i].position);
-            float attenuation = calcAttenuation(lightDist, uLights[i].kc, uLights[i].kl, uLights[i].kq);
-            vec3  lightDir    = normalize(fragPos - uLights[i].position);
+            float lightDist   = length(fragPos - light.position);
+            float attenuation = calcAttenuation(lightDist, light.kc, light.kl, light.kq);
+            vec3  lightDir    = normalize(fragPos - light.position);
 
             //If it is also a spot light, add circle mode intensity.
-            if (uLights[i].type == 2)
+            if (light.type == 2)
             {
-                float theta = max( dot(-lightDir, -uLights[i].direction), 0.0f );
-                spotItense  = clamp( (theta - uLights[i].spotOuter) / (uLights[i].spotInner - uLights[i].spotOuter), 0.0f, 1.0f);
+                float theta = max( dot(-lightDir, -light.direction), 0.0f );
+                spotItense  = clamp( (theta - light.spotOuter) / (light.spotInner - light.spotOuter), 0.0f, 1.0f);
             }
 
             //Calculating diffuse, specular and adding attenuation, is the same for both point and spot lights.
-            vec4 diffuse  = calculateDiffuse(diffuseMap, uLights[i].color, uLights[i].strength, lightDir, normalDir);
-            vec4 specular = calculateSpecular(specularMap, uLights[i].color, uLights[i].strength, lightDir, normalDir, eyeDir, uMat.shininess);
+            vec4 diffuse  = calculateDiffuse(diffuseMap, light.color, light.strength, lightDir, normalDir);
+            vec4 specular = calculateSpecular(specularMap, light.color, light.strength, lightDir, normalDir, eyeDir, uMat.shininess);
 
             finalColor  += (diffuse + specular) * attenuation * spotItense;
         }
 
         //Diffuse light.
-        else if (uLights[i].type == 3)
+        else if (light.type == 3)
         {   
             //Keep ambient total light in a seperate variable, because if it is the last
             //color added to the finalColor, then we make sure there is always some light!
-            ambientColor += calculateAmbient(diffuseMap, uLights[i].color, uLights[i].strength);
+            ambientColor += calculateAmbient(diffuseMap, light.color, light.strength);
         }
 
-        //Break out of the loop if uLights[i] is the last light.
-        if (uLights[i].isFinal == 1)
+        //Break out of the loop if light is the last light.
+        if (light.isFinal == 1)
             break;
     }
 
