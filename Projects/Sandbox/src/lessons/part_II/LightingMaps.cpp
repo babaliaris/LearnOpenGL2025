@@ -67,7 +67,7 @@ void LightingMaps::OnStart()
 
     //Light Source
     m_shaderContainer->SetUniform("uLight.pos", m_lightPos);
-    m_shaderContainer->SetUniform("uLight.color", glm::vec3(1.0f, 0.0f, 0.0f));
+    m_shaderContainer->SetUniform("uLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
     m_shaderContainer->SetUniform("uLight.strength", 1.0f);
 
     //Light model matrix/uniform.

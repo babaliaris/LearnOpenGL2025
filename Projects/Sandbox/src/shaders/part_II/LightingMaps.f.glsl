@@ -53,7 +53,7 @@ void main()
     finalColor      += calculateDiffuse(diffuseMap, lightDir, normalDir);
     finalColor      += calculateSpecular(specularMap, lightDir, normalDir, eyeDir, uMat.shininess);
 
-    fColor = finalColor;
+    fColor = clamp(finalColor, 0.0f, 1.0f);
 }
 
 vec4 calculateAmbient(in vec4 diffuseMap)
