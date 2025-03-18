@@ -29,6 +29,7 @@ void LightingMaps::OnAttach()
     );
 
     m_containerDiffuse = new FRGL::Texture("Projects/Sandbox/assets/textures/container_steel_diffuse.png");
+    m_containerSpecular = new FRGL::Texture("Projects/Sandbox/assets/textures/container_steel_specular.png");
 
     this->InitializeGeometry();
 }
@@ -38,6 +39,7 @@ void LightingMaps::OnDetach()
     delete m_shaderContainer;
     delete m_shaderLight;
     delete m_containerDiffuse;
+    delete m_containerSpecular;
     delete m_cam;
 }
 
@@ -53,7 +55,9 @@ void LightingMaps::OnStart()
     m_cam->SetSpeed(5.0f);
 
     //Container fixed uniforms.
-    m_shaderContainer->SetUniform("uContainer", 0);
+    m_shaderContainer->SetUniform("uMat.diffuse", 0);
+    m_shaderContainer->SetUniform("uMat.specular", 1);
+    m_shaderContainer->SetUniform("uMat.shininess", 32);
     m_shaderContainer->SetUniform("uModel", glm::mat4(1.0f));
     m_shaderContainer->SetUniform("uNormal", glm::mat3(1.0f));
 
@@ -98,10 +102,12 @@ void LightingMaps::OnUpdate(double time)
 
     //Draw the container.
     m_containerDiffuse->Bind(0);
+    m_containerSpecular->Bind(1);
     m_shaderContainer->Bind();
     glCall(glBindVertexArray(m_containerVao));
     glDrawArrays(GL_TRIANGLES, 0, 36);
     m_containerDiffuse->Unbind();
+    m_containerSpecular->Unbind();
     m_shaderContainer->UnBind();
     glCall(glBindVertexArray(0));
 

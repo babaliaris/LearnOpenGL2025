@@ -19,7 +19,7 @@ class LightingMaps: public FRGL::Layer
     glm::vec3 m_lightPos = glm::vec3(-2.0f, 2.0f, -2.0f);
 
     FRGL::Shader *m_shaderContainer, *m_shaderLight;
-    FRGL::Texture *m_containerDiffuse;
+    FRGL::Texture *m_containerDiffuse, *m_containerSpecular;
     FRGL::Camera *m_cam;
 
     private:
