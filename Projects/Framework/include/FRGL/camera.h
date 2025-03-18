@@ -29,6 +29,7 @@ namespace FRGL
         inline void SetPosition(const glm::vec3 &pos){m_pos = pos;this->CalculateLocalSpace();}
 
         inline glm::vec3 GetPos() const {return m_pos;}
+        inline glm::vec3 getDir() const {return m_direction;}
 
         private:
         float m_sensitivity = 10.0f, m_actualSpeed = 5.0f, m_speed = 5.0f, m_sprint = 10.0f;

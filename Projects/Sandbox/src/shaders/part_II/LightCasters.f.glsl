@@ -79,6 +79,7 @@ void main()
     float lightStrength;
     float lightDist;
     float kc, kl, kq;
+    float spotItense = 1.0f;
 
     //Point Light.
     if (uChooseLight == 1)
@@ -102,20 +103,24 @@ void main()
         kc              = uSpotLight.kc;
         kl              = uSpotLight.kl;
         kq              = uSpotLight.kq;
-    }
 
-    //Debug color using normals.
-    else
-    {
-        finalColor = vec4(normal, 1.0f);
+        float theta   = max( dot(-lightDir, -uSpotLight.direction), 0.0f );
+        spotItense    = clamp( (theta - uSpotLight.outer) / (uSpotLight.inner - uSpotLight.outer), 0.0f, 1.0f);
     }
 
     //Calculate Phong Lighting.
     finalColor      += calculateDiffuse(diffuseMap, lightColor, lightStrength, lightDir, normalDir);
     finalColor      += calculateSpecular(specularMap, lightColor, lightStrength, lightDir, normalDir, eyeDir, uMat.shininess);
     finalColor      *= calcAttenuation(lightDist, kc, kl, kq);
+    finalColor      *= spotItense;
 
     finalColor      += calculateAmbient(diffuseMap); //Add ambient at the end, to make sure there is some light.
+
+    //Debug color using normals.
+    if (uChooseLight > 2 || uChooseLight < 0)
+    {
+        finalColor = vec4(normal, 1.0f);
+    }
 
     fColor = clamp(finalColor, 0.0f, 1.0f);
 }
