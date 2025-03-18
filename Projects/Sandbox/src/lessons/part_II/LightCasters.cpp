@@ -79,6 +79,9 @@ void LightCasters::OnStart()
     m_shaderContainer->SetUniform("uSpotLight.pos", m_lightPos);
     m_shaderContainer->SetUniform("uSpotLight.color", glm::vec3(1.0f, 1.0f, 1.0f));
     m_shaderContainer->SetUniform("uSpotLight.strength", 1.0f);
+    m_shaderContainer->SetUniform("uSpotLight.kc", 1.0f);
+    m_shaderContainer->SetUniform("uSpotLight.kl", 0.35f);
+    m_shaderContainer->SetUniform("uSpotLight.kq", 0.0035f);
 
     //Light model matrix/uniform.
     glm::mat4 lightModel = glm::mat4(1.0f);
