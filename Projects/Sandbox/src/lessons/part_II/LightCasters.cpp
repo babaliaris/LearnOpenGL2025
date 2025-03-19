@@ -64,9 +64,6 @@ void LightCasters::OnStart()
     m_cam = new FRGL::Camera(GetApp(), glm::vec3(0.0f, 0.0f, 3.0f));
     m_cam->SetSpeed(5.0f);
 
-    //0=Directional Light, 1=Point Light, 2=Spot Light.
-    m_shaderContainer->SetUniform("uChooseLight", 2);;
-
     //Container fixed uniforms.
     m_shaderContainer->SetUniform("uMat.diffuse", 0);
     m_shaderContainer->SetUniform("uMat.specular", 1);
