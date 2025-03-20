@@ -12,6 +12,7 @@
 #include "part_II/BasicLighting.h"
 #include "part_II/LightingMaps.h"
 #include "part_II/LightCasters.h"
+#include "part_III/ModelLoading.h"
 
 enum class LessonE
 {
@@ -19,13 +20,17 @@ enum class LessonE
     PART_I_SHADERS, PART_I_TEXTURES,
     PART_I_TRANSFORMATIONS, PART_I_COORDINATE_SPACES,
     PART_I_CAMERA, PART_II_COLORS, PART_II_BASIC_LIGHTING,
-    PART_II_LIGHTING_MAPS, PART_II_LIGHT_CASTERS
+    PART_II_LIGHTING_MAPS, PART_II_LIGHT_CASTERS,
+    PART_III_MODEL_LOADING
 };
 
 FRGL::Layer *SelectLesson(LessonE lesson)
 {
     switch (lesson)
     {
+        case LessonE::PART_III_MODEL_LOADING:
+            return new ModelLoading();
+
         case LessonE::PART_I_TEST_LESSON:
             return new TestLesson();
 
