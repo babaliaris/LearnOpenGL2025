@@ -20,7 +20,8 @@ project "Framework"
         "%{_WORKING_DIR}/Extern/GLFW/include",
         "%{_WORKING_DIR}/Extern/GLM",
         "%{_WORKING_DIR}/Extern/STB",
-        "%{_WORKING_DIR}/Extern/assimp/include"
+        "%{_WORKING_DIR}/Extern/assimp/include",
+        "%{_WORKING_DIR}/Extern/assimp/build/include"
     }
 
     prebuildcommands {
