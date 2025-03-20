@@ -19,7 +19,15 @@ project "Framework"
         "%{_WORKING_DIR}/Extern/GLEW/include",
         "%{_WORKING_DIR}/Extern/GLFW/include",
         "%{_WORKING_DIR}/Extern/GLM",
-        "%{_WORKING_DIR}/Extern/STB"
+        "%{_WORKING_DIR}/Extern/STB",
+        "%{_WORKING_DIR}/Extern/assimp/include"
+    }
+
+    prebuildcommands {
+        -- Compile Assimp.
+        "{MKDIR} %{_WORKING_DIR}/Extern/assimp/build",
+        "{CHDIR} %{_WORKING_DIR}/Extern/assimp/build && cmake .. -DBUILD_SHARED_LIBS=OFF && make",
+        "{COPYFILE} %{_WORKING_DIR}/Extern/assimp/build/lib/libassimp.a %{_WORKING_DIR}/builds/%{cfg.shortname}"
     }
 
 

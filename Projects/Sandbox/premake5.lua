@@ -5,16 +5,14 @@ project "Sandbox"
     objdir "%{_WORKING_DIR}/obj/%{prj.name}_%{cfg.shortname}/"
     targetname "sandbox"
 
-    files
-    {
+    files {
         "src/**.h",
         "src/**.cpp",
         "src/**.hpp",
         "src/**.c"
     }
 
-    includedirs
-    {
+    includedirs {
         "%{_WORKING_DIR}/Extern/GLEW/include",
         "%{_WORKING_DIR}/Extern/GLFW/include",
         "%{_WORKING_DIR}/Extern/GLM",
@@ -22,24 +20,25 @@ project "Sandbox"
         "%{_WORKING_DIR}/Extern/STB"
     }
 
-    links
-    {
+    links {
         "Framework",
         "GLEW",
         "GLFW",
-        "STB_IMAGE"
-        
+        "STB_IMAGE",
+        "assimp"
+    }
+
+    libdirs {
+        "%{_WORKING_DIR}/builds/%{cfg.shortname}/"
     }
 
     filter "system:linux"
         pic "On"
         
-        files
-        {
+        files {
         }
 
-        defines
-        {
+        defines {
         }
 
         links
@@ -49,16 +48,13 @@ project "Sandbox"
 
     filter "system:windows"
 
-        files
-        {
+        files {
         }
 
-        defines 
-        { 
+        defines { 
         }
 
-        links
-        {
+        links {
             "opengl32"
         }
 
