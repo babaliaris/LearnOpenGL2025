@@ -12,12 +12,12 @@ namespace FRGL
             const std::vector<Texture *> &textures):
     m_vao(0), m_vbo(0), m_ebo(0), m_num_of_indices(indices.size()),
     m_textures(textures)
-    {   
+    {
         //Generate the buffers.
         glCall(glGenVertexArrays(1, &m_vao));
         glCall(glGenBuffers(1, &m_vbo));
         glCall(glGenBuffers(1, &m_ebo));
-        
+
         //Bind VAO.
         glCall(glBindVertexArray(m_vao));
 
@@ -65,6 +65,41 @@ namespace FRGL
 
     void Mesh::draw(Shader *shader)
     {
-        
+        //Bind the textures.
+        for (int i = 0; i < m_textures.size(); i++)
+        {
+            m_textures[i]->Bind(i);
+
+            switch (m_textures[i]->GetType())
+            {
+                case TextureType::DIFFUSE:
+                    shader->SetUniform("uMat.diffuse", i);
+                    break;
+
+                case TextureType::SPECULAR:
+                    shader->SetUniform("uMat.specular", i);
+                    break;
+                
+                default:
+                    std::cout << "[Mesh:Draw()] Warning! Texture type is uknown!!!" << std::endl;
+                    break;
+            }
+        }
+
+        //Set the shininess of the matertial.
+        shader->SetUniform("uMat.shininess", 32);
+
+        //Bind the rest stuff and draw.
+        glCall(glBindVertexArray(m_vao));
+        shader->Bind();
+        glCall(glDrawElements(GL_TRIANGLES, m_num_of_indices, GL_UNSIGNED_INT, NULL));
+
+        //Unbind everything.
+        glCall(glBindVertexArray(0));
+        for (Texture *tex : m_textures)
+        {
+            tex->Unbind();
+        }
+        shader->UnBind();
     }
 }
