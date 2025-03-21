@@ -34,7 +34,7 @@ namespace FRGL
         private:
         float m_sensitivity = 10.0f, m_actualSpeed = 5.0f, m_speed = 5.0f, m_sprint = 10.0f;
         float m_pitch = 0.0f, m_yaw = -90.0f, m_lastX, m_lastY;
-        bool m_firstMouse = true;
+        bool m_firstMouse = true, m_cursorDisabled = true;
         glm::vec3 m_pos, m_right, m_up, m_direction;
         Application *m_app;
 

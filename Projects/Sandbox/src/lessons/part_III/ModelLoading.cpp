@@ -43,9 +43,6 @@ void ModelLoading::OnStart()
 {
     glCall(glEnable(GL_DEPTH_TEST));
 
-    //Disable the cursor.
-    glfwSetInputMode(GetApp()->GetWindow()->GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
     //Load the model.
     m_model = new FRGL::Model("Projects/Sandbox/assets/models/backpack/backpack.obj");
 

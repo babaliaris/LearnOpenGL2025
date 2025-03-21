@@ -10,6 +10,9 @@ namespace FRGL
     m_pos(pos), m_direction(glm::vec3(0.0f, 0.0f, -1.0f)), m_app(app)
     {
         this->CalculateLocalSpace();
+
+        //Disable the cursor.
+        glfwSetInputMode(m_app->GetWindow()->GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     Camera::Camera(Application *app, float posx, float posy, float posz):
@@ -17,6 +20,9 @@ namespace FRGL
     {
         m_pos = glm::vec3(posx, posy, posz);
         this->CalculateLocalSpace();
+
+        //Disable the cursor.
+        glfwSetInputMode(m_app->GetWindow()->GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
 
@@ -35,6 +41,24 @@ namespace FRGL
 
         else if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
             m_actualSpeed = m_speed;
+        
+        //Enable the cursor back
+        if (glfwGetKey(m_app->GetWindow()->GetGLFWwindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+                if (m_cursorDisabled)
+                {
+                    //Enable the cursor.
+                    glfwSetInputMode(m_app->GetWindow()->GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                    m_cursorDisabled = false;
+                }
+
+                else
+                {
+                    //Disable the cursor.
+                    glfwSetInputMode(m_app->GetWindow()->GetGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                    m_cursorDisabled = true;
+                }
+        }
 
         
 
