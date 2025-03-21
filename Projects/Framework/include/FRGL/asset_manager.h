@@ -8,7 +8,7 @@ namespace FRGL
     struct TextureNode
     {
         TextureNode(Texture *tex):
-        m_texture(tex), m_count(0)
+        m_texture(tex), m_count(1)
         {}
 
         Texture *m_texture;
