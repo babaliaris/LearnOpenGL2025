@@ -13,6 +13,8 @@ namespace FRGL
         void Bind(unsigned int unit);
         void Unbind();
 
+        inline std::string GetFilename() const {return m_filename;}
+
         private:
         unsigned int m_id, m_boundUnit;
         int m_width, m_height, m_channels;

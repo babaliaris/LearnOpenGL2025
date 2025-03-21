@@ -4,6 +4,7 @@
 
 #include <FRGL/window.h>
 #include <FRGL/layer.h>
+#include <FRGL/asset_manager.h>
 
 namespace FRGL
 {
@@ -11,6 +12,8 @@ namespace FRGL
     m_layer_incremental(0), m_window(nullptr), m_deltatime(0)
     {
         m_window = new Window(width, height, title);
+
+        AssetManager::Initialize();
     }
 
     Application::~Application()
@@ -19,6 +22,8 @@ namespace FRGL
         {
             delete l;
         }
+
+        AssetManager::Deinitialize();
 
         delete m_window;
     }

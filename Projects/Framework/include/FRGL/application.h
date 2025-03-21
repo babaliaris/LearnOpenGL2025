@@ -6,6 +6,7 @@ namespace FRGL
 {
     class Window;
     class Layer;
+    class AssetManager;
 
     class Application
     {
