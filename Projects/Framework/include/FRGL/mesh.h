@@ -28,7 +28,7 @@ namespace FRGL
         void draw(Shader *shader);
 
         private:
-        unsigned int m_vao, m_vbo, m_ebo;
+        unsigned int m_vao, m_vbo, m_ebo, m_num_of_indices;
         std::vector<Texture *> m_textures;
     };
 }
