@@ -3,6 +3,7 @@
 #include <FRGL/texture.h>
 #include <GL/glew.h>
 #include <FRGL/glcall.h>
+#include <FRGL/asset_manager.h>
 
 namespace FRGL
 {
@@ -49,11 +50,16 @@ namespace FRGL
 
     Mesh::~Mesh()
     {
+        //Delete all the buffers.
         glCall(glDeleteBuffers(1, &m_vbo));
         glCall(glDeleteBuffers(1, &m_ebo));
         glCall(glDeleteVertexArrays(1, &m_vao));
 
-        //TODO Do the textures
+        //Release the textures.
+        for (Texture *tex : m_textures)
+        {
+            AssetManager::ReleaseTexture(tex);
+        }
     }
 
 
