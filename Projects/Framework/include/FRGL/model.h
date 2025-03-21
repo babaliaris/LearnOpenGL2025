@@ -18,8 +18,8 @@ namespace FRGL
         void Draw(Shader *shader);
 
         private:
-            std::vector<Mesh *> meshes;
-            std::string directory;
+            std::vector<Mesh *> m_meshes;
+            std::string m_directory;
 
             void loadModel(const std::string &path);
 
@@ -27,7 +27,6 @@ namespace FRGL
 
             Mesh *processMesh(aiMesh *mesh, const aiScene *scene);
 
-            std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, 
-                                                std::string typeName);
+            std::vector<Texture *> loadMaterialTextures(aiMaterial *mat, aiTextureType type);
     };
 }

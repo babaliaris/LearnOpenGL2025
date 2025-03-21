@@ -27,7 +27,8 @@ project "Sandbox"
         "GLEW",
         "GLFW",
         "STB_IMAGE",
-        "assimp"
+        "assimp",
+        "zlibstatic"
     }
 
     libdirs {

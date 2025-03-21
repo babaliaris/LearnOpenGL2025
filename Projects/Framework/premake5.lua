@@ -27,8 +27,9 @@ project "Framework"
     prebuildcommands {
         -- Compile Assimp.
         "{MKDIR} %{_WORKING_DIR}/Extern/assimp/build",
-        "{CHDIR} %{_WORKING_DIR}/Extern/assimp/build && cmake .. -DBUILD_SHARED_LIBS=OFF && make",
-        "{COPYFILE} %{_WORKING_DIR}/Extern/assimp/build/lib/libassimp.a %{_WORKING_DIR}/builds/%{cfg.shortname}"
+        "{CHDIR} %{_WORKING_DIR}/Extern/assimp/build && cmake .. -DBUILD_SHARED_LIBS=OFF -DASSIMP_BUILD_ZLIB=ON && make",
+        "{COPYFILE} %{_WORKING_DIR}/Extern/assimp/build/lib/libassimp.a %{_WORKING_DIR}/builds/%{cfg.shortname}",
+        "{COPYFILE} %{_WORKING_DIR}/Extern/assimp/build/contrib/zlib/libzlibstatic.a %{_WORKING_DIR}/builds/%{cfg.shortname}"
     }
 
 

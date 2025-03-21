@@ -10,6 +10,10 @@ namespace FRGL
 
     struct Vertex
     {
+        Vertex(const glm::vec3 &pos, const glm::vec3 &norm, const glm::vec2 uv):
+        position(pos), normal(norm), uv(uv)
+        {}
+
         glm::vec3 position;
         glm::vec3 normal;
         glm::vec2 uv;

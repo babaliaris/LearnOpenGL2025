@@ -22,8 +22,8 @@ namespace FRGL
         glCall(glBindVertexArray(m_vao));
 
         //Bind VBO and transfer the data.
-        glCall(glBindBuffer(GL_VERTEX_ARRAY, m_vbo));
-        glCall(glBufferData(GL_VERTEX_ARRAY, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW));
+        glCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
+        glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW));
 
         //Position.
         glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *)offsetof(Vertex, position)));
@@ -44,7 +44,7 @@ namespace FRGL
         //Unbind Everything.
         glCall(glBindVertexArray(0));
         glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-        glCall(glBindBuffer(GL_VERTEX_ARRAY, 0));
+        glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
 
 
