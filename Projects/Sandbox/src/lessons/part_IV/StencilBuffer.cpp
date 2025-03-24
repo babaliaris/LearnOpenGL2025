@@ -30,10 +30,16 @@ void StencilBuffer::OnAttach()
         "Projects/Sandbox/src/shaders/part_IV/StencilBuffer.f.glsl"
     );
 
+    m_shaderOutline = new FRGL::Shader(
+        "Projects/Sandbox/src/shaders/part_IV/Outline.v.glsl",
+        "Projects/Sandbox/src/shaders/part_IV/Outline.f.glsl"
+    );
+
     m_shaderLight = new FRGL::Shader(
         "Projects/Sandbox/src/shaders/light.v.glsl",
         "Projects/Sandbox/src/shaders/light.f.glsl"
     );
+
 
     this->InitializeGeometry();
 }
@@ -45,6 +51,7 @@ void StencilBuffer::OnDetach()
 void StencilBuffer::OnStart()
 {
     glCall(glEnable(GL_DEPTH_TEST));
+    glCall(glEnable(GL_STENCIL_TEST));
 
     //Load the textures.
     m_diffuse = new FRGL::Texture("Projects/Sandbox/assets/textures/container_steel_diffuse.png");
@@ -53,6 +60,9 @@ void StencilBuffer::OnStart()
     //Create a camera.
     m_cam = new FRGL::Camera(GetApp(), glm::vec3(0.0f, 0.0f, 3.0f));
     m_cam->SetSpeed(5.0f);
+
+    //Outline fixed uniforms.
+    m_shaderOutline->SetUniform("uModel", glm::mat4(1.0f));
 
     //Container fixed uniforms.
     m_shaderContainer->SetUniform("uModel", glm::mat4(1.0f));
@@ -97,7 +107,7 @@ void StencilBuffer::OnStart()
 
 void StencilBuffer::OnUpdate(double time)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     //Camera movement.
     m_cam->Move(FRGL::CameraModeE::KEYBOARD_MOUSE);
@@ -120,6 +130,14 @@ void StencilBuffer::OnUpdate(double time)
     m_shaderLight->SetUniform("uView", m_cam->GetProj());
     m_shaderLight->SetUniform("uProj", proj);
 
+    //Set Outline uniforms.
+    m_shaderOutline->SetUniform("uView", m_cam->GetProj());
+    m_shaderOutline->SetUniform("uProj", proj);
+
+    glCall(glStencilMask(0xFF)); //Enable Stencil Writing.
+    glCall(glStencilFunc(GL_ALWAYS, 1, 0xFF));
+    glCall(glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE));
+
     //Draw the Container here!
     m_shaderContainer->Bind();
     m_diffuse->Bind(0);
@@ -131,10 +149,27 @@ void StencilBuffer::OnUpdate(double time)
     m_diffuse->Unbind();
     m_specular->Unbind();
 
+    glCall(glStencilMask(0x00)); //Disable Stencil Writing.
+    glCall(glStencilFunc(GL_NOTEQUAL, 1, 0xFF));
+    glCall(glDisable(GL_DEPTH_TEST));
+
+    //Draw it Again, scaled and using the Outline shader!
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::scale(model, glm::vec3(1.1f, 1.1f, 1.1f));
+    m_shaderOutline->SetUniform("uModel", model);
+    m_shaderOutline->Bind();
+    glCall(glBindVertexArray(m_containerVao));
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    m_shaderOutline->UnBind();
+    glCall(glBindVertexArray(0));
+
+    glCall(glStencilMask(0xFF)); //Enable Stencil Writing (So it can be cleared).
+    glCall(glEnable(GL_DEPTH_TEST)); //Enable Depth Test.
+
     //Draw the light.
     m_shaderLight->Bind();
     glCall(glBindVertexArray(m_lightVao));
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glCall(glDrawArrays(GL_TRIANGLES, 0, 36));
     m_shaderLight->UnBind();
     glCall(glBindVertexArray(0));
 }

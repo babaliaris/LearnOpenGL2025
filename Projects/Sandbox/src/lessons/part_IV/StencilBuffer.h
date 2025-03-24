@@ -17,7 +17,7 @@ class StencilBuffer: public FRGL::Layer
 
     glm::vec3 m_lightPos = glm::vec3(-2.0f, 2.0f, -2.0f);
 
-    FRGL::Shader *m_shaderContainer, *m_shaderLight;
+    FRGL::Shader *m_shaderContainer, *m_shaderLight, *m_shaderOutline;
     FRGL::Camera *m_cam;
 
     FRGL::Texture *m_diffuse, *m_specular;
