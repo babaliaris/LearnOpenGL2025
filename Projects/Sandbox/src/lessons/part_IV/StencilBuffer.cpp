@@ -11,10 +11,13 @@ StencilBuffer::StencilBuffer()
 
 StencilBuffer::~StencilBuffer()
 {
-    delete m_model;
-    delete m_shaderModel;
+    delete m_shaderContainer;
     delete m_shaderLight;
     delete m_cam;
+
+    glCall(glDeleteBuffers(1, &m_vbo));
+    glCall(glDeleteVertexArrays(1, &m_containerVao));
+    glCall(glDeleteVertexArrays(1, &m_lightVao));
 }
 
 void StencilBuffer::OnAttach()
@@ -22,9 +25,9 @@ void StencilBuffer::OnAttach()
     glCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 
 
-    m_shaderModel = new FRGL::Shader(
-        "Projects/Sandbox/src/shaders/part_III/ModelLoading.v.glsl",
-        "Projects/Sandbox/src/shaders/part_III/ModelLoading.f.glsl"
+    m_shaderContainer = new FRGL::Shader(
+        "Projects/Sandbox/src/shaders/part_IV/StencilBuffer.v.glsl",
+        "Projects/Sandbox/src/shaders/part_IV/StencilBuffer.f.glsl"
     );
 
     m_shaderLight = new FRGL::Shader(
@@ -43,43 +46,47 @@ void StencilBuffer::OnStart()
 {
     glCall(glEnable(GL_DEPTH_TEST));
 
-    //Load the model.
-    m_model = new FRGL::Model("Projects/Sandbox/assets/models/backpack/backpack.obj");
+    //Load the textures.
+    m_diffuse = new FRGL::Texture("Projects/Sandbox/assets/textures/container_steel_diffuse.png");
+    m_specular = new FRGL::Texture("Projects/Sandbox/assets/textures/container_steel_specular.png");
 
     //Create a camera.
     m_cam = new FRGL::Camera(GetApp(), glm::vec3(0.0f, 0.0f, 3.0f));
     m_cam->SetSpeed(5.0f);
 
     //Container fixed uniforms.
-    m_shaderModel->SetUniform("uModel", glm::mat4(1.0f));
-    m_shaderModel->SetUniform("uNormal", glm::mat3(1.0f));
+    m_shaderContainer->SetUniform("uModel", glm::mat4(1.0f));
+    m_shaderContainer->SetUniform("uNormal", glm::mat3(1.0f));
+    m_shaderContainer->SetUniform("uMat.diffuse", 0);
+    m_shaderContainer->SetUniform("uMat.specular", 1);
+    m_shaderContainer->SetUniform("uMat.shininess", 64);
 
     //Ambient Light
-    m_shaderModel->SetUniform("uLights[0].isFinal", 0);
-    m_shaderModel->SetUniform("uLights[0].type", 3);
-    m_shaderModel->SetUniform("uLights[0].color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shaderModel->SetUniform("uLights[0].strength", 0.2f);
+    m_shaderContainer->SetUniform("uLights[0].isFinal", 0);
+    m_shaderContainer->SetUniform("uLights[0].type", 3);
+    m_shaderContainer->SetUniform("uLights[0].color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uLights[0].strength", 0.2f);
 
     //Point Light.
-    m_shaderModel->SetUniform("uLights[1].isFinal", 0);
-    m_shaderModel->SetUniform("uLights[1].type", 1);
-    m_shaderModel->SetUniform("uLights[1].position", m_lightPos);
-    m_shaderModel->SetUniform("uLights[1].color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shaderModel->SetUniform("uLights[1].strength", 1.0f);
-    m_shaderModel->SetUniform("uLights[1].kc", 1.0f);
-    m_shaderModel->SetUniform("uLights[1].kl", 0.1f);
-    m_shaderModel->SetUniform("uLights[1].kq", 0.03f);
+    m_shaderContainer->SetUniform("uLights[1].isFinal", 0);
+    m_shaderContainer->SetUniform("uLights[1].type", 1);
+    m_shaderContainer->SetUniform("uLights[1].position", m_lightPos);
+    m_shaderContainer->SetUniform("uLights[1].color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uLights[1].strength", 1.0f);
+    m_shaderContainer->SetUniform("uLights[1].kc", 1.0f);
+    m_shaderContainer->SetUniform("uLights[1].kl", 0.1f);
+    m_shaderContainer->SetUniform("uLights[1].kq", 0.03f);
 
     //Spot Light.
-    m_shaderModel->SetUniform("uLights[2].isFinal", 1);
-    m_shaderModel->SetUniform("uLights[2].type", 2);
-    m_shaderModel->SetUniform("uLights[2].color", glm::vec3(1.0f, 1.0f, 1.0f));
-    m_shaderModel->SetUniform("uLights[2].strength", 1.0f);
-    m_shaderModel->SetUniform("uLights[2].spotInner", glm::cos(glm::radians(12.0f)));
-    m_shaderModel->SetUniform("uLights[2].spotOuter",  glm::cos(glm::radians(17.0f)));
-    m_shaderModel->SetUniform("uLights[2].kc", 1.0f);
-    m_shaderModel->SetUniform("uLights[2].kl", 0.1f);
-    m_shaderModel->SetUniform("uLights[2].kq", 0.03f);
+    m_shaderContainer->SetUniform("uLights[2].isFinal", 1);
+    m_shaderContainer->SetUniform("uLights[2].type", 2);
+    m_shaderContainer->SetUniform("uLights[2].color", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_shaderContainer->SetUniform("uLights[2].strength", 1.0f);
+    m_shaderContainer->SetUniform("uLights[2].spotInner", glm::cos(glm::radians(12.0f)));
+    m_shaderContainer->SetUniform("uLights[2].spotOuter",  glm::cos(glm::radians(17.0f)));
+    m_shaderContainer->SetUniform("uLights[2].kc", 1.0f);
+    m_shaderContainer->SetUniform("uLights[2].kl", 0.1f);
+    m_shaderContainer->SetUniform("uLights[2].kq", 0.03f);
 
     //Light model matrix/uniform.
     glm::mat4 lightModel = glm::mat4(1.0f);
@@ -103,18 +110,26 @@ void StencilBuffer::OnUpdate(double time)
     );
 
     //Set container's uniforms.
-    m_shaderModel->SetUniform("uView", m_cam->GetProj());
-    m_shaderModel->SetUniform("uProj", proj);
-    m_shaderModel->SetUniform("uCamPos", m_cam->GetPos());
-    m_shaderModel->SetUniform("uLights[2].direction", m_cam->getDir());
-    m_shaderModel->SetUniform("uLights[2].position", m_cam->GetPos());
+    m_shaderContainer->SetUniform("uView", m_cam->GetProj());
+    m_shaderContainer->SetUniform("uProj", proj);
+    m_shaderContainer->SetUniform("uCamPos", m_cam->GetPos());
+    m_shaderContainer->SetUniform("uLights[2].direction", m_cam->getDir());
+    m_shaderContainer->SetUniform("uLights[2].position", m_cam->GetPos());
     
     //Set light's uniforms.
     m_shaderLight->SetUniform("uView", m_cam->GetProj());
     m_shaderLight->SetUniform("uProj", proj);
 
-    //Draw the Model here!
-    m_model->Draw(m_shaderModel);
+    //Draw the Container here!
+    m_shaderContainer->Bind();
+    m_diffuse->Bind(0);
+    m_specular->Bind(1);
+    glCall(glBindVertexArray(m_containerVao));
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    m_shaderContainer->UnBind();
+    glCall(glBindVertexArray(0));
+    m_diffuse->Unbind();
+    m_specular->Unbind();
 
     //Draw the light.
     m_shaderLight->Bind();
@@ -174,62 +189,17 @@ void StencilBuffer::InitializeGeometry()
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
+    //Create the vertex buffer and upload the data.
+    glCall(glGenBuffers(1, &m_vbo));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
+    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(containerVertices), containerVertices, GL_STATIC_DRAW));
 
+    
+    //===================Container VAO and Vertex Atrributes Set-Up===================//
 
-    //Create the light.
-    float lightVertices[] = {
-        //Positions
-        -0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f, 
-        0.5f,  0.5f, -0.5f, 
-        0.5f,  0.5f, -0.5f, 
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-
-        -0.5f, -0.5f,  0.5f,
-        0.5f, -0.5f,  0.5f, 
-        0.5f,  0.5f,  0.5f, 
-        0.5f,  0.5f,  0.5f, 
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-
-        0.5f,  0.5f,  0.5f, 
-        0.5f,  0.5f, -0.5f, 
-        0.5f, -0.5f, -0.5f, 
-        0.5f, -0.5f, -0.5f, 
-        0.5f, -0.5f,  0.5f, 
-        0.5f,  0.5f,  0.5f, 
-
-        -0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f, -0.5f, 
-        0.5f, -0.5f,  0.5f, 
-        0.5f, -0.5f,  0.5f, 
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
-
-        -0.5f,  0.5f, -0.5f,
-        0.5f,  0.5f, -0.5f, 
-        0.5f,  0.5f,  0.5f, 
-        0.5f,  0.5f,  0.5f, 
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f
-    };
-
-
-    /*
+    //Create and bind the containers VAO.
     glCall(glGenVertexArrays(1, &m_containerVao));
     glCall(glBindVertexArray(m_containerVao));
-
-    glCall(glGenBuffers(1, &m_containerVbo));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_containerVbo));
-    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(containerVertices), containerVertices, GL_STATIC_DRAW));
 
     //Positions
     glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (const void *)0));
@@ -242,23 +212,20 @@ void StencilBuffer::InitializeGeometry()
     //Texture Coordinates (UVs).
     glCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (const void *)(sizeof(float)*6)));
     glCall(glEnableVertexAttribArray(2));
-
-    glCall(glBindVertexArray(0));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    */
+    //===================Container VAO and Vertex Atrributes Set-Up===================//
 
 
-    //Light Cube Draw Data Preperation.
+    //===================Light VAO and Vertex Atrributes Set-Up===================//
+
+    //Create and bind the light's VAO.
     glCall(glGenVertexArrays(1, &m_lightVao));
     glCall(glBindVertexArray(m_lightVao));
 
-    glCall(glGenBuffers(1, &m_lightVbo));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, m_lightVbo));
-    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(lightVertices), lightVertices, GL_STATIC_DRAW));
-
-    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (const void *)0));
+    //Positions.
+    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (const void *)0));
     glCall(glEnableVertexAttribArray(0));
 
     glCall(glBindVertexArray(0));
     glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    //===================Light VAO and Vertex Atrributes Set-Up===================//
 }

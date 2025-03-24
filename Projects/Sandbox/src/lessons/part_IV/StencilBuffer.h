@@ -13,14 +13,14 @@ class StencilBuffer: public FRGL::Layer
     virtual void OnUpdate(double time) override;
 
     private:
-    unsigned int m_lightVao, m_lightVbo;
-
-    FRGL::Model *m_model;
+    unsigned int m_vbo, m_containerVao, m_lightVao;
 
     glm::vec3 m_lightPos = glm::vec3(-2.0f, 2.0f, -2.0f);
 
-    FRGL::Shader *m_shaderModel, *m_shaderLight;
+    FRGL::Shader *m_shaderContainer, *m_shaderLight;
     FRGL::Camera *m_cam;
+
+    FRGL::Texture *m_diffuse, *m_specular;
 
     private:
     void InitializeGeometry();
