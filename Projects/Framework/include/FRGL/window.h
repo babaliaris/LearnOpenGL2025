@@ -19,6 +19,8 @@ namespace FRGL
         bool IsRunning();
         double GetTime();
 
+        void SetTitle(const std::string &title);
+
         inline int GetWidth() const {return m_width;}
         inline int GetHeight() const {return m_height;}
         inline std::string GetTitle() const {return m_title;}

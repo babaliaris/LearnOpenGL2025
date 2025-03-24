@@ -66,6 +66,12 @@ namespace FRGL
         return !glfwWindowShouldClose(m_window);
     }
 
+
+    void Window::SetTitle(const std::string &title)
+    {
+        glfwSetWindowTitle(m_window, title.c_str());
+    }
+
     double Window::GetTime()
     {
         return glfwGetTime();

@@ -10,7 +10,11 @@ class LearnOpenGL : public FRGL::Application
     LearnOpenGL():
     Application(512, 512, "Learn OpenGL")
     {
-        this->AttachLayer(SelectLesson(LessonE::PART_III_MODEL_LOADING));
+        FRGL::Layer *lesson = SelectLesson(LessonE::PART_IV_STENCIL_BUFFER);
+
+        this->GetWindow()->SetTitle(lesson->GetTitle());
+
+        this->AttachLayer(lesson);
     }
 
     ~LearnOpenGL()
