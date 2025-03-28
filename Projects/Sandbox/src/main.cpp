@@ -10,7 +10,7 @@ class LearnOpenGL : public FRGL::Application
     LearnOpenGL():
     Application(512, 512, "Learn OpenGL")
     {
-        FRGL::Layer *lesson = SelectLesson(LessonE::PART_IV_STENCIL_BUFFER);
+        FRGL::Layer *lesson = SelectLesson(LessonE::PART_IV_BLENDING);
 
         this->GetWindow()->SetTitle(lesson->GetTitle());
 
